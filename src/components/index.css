@@ -1,0 +1,161 @@
+.task-button {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 7px;
+}
+
+.icon {
+  color: #fafafa;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+  border-radius: 7px;
+  filter: drop-shadow(0, 4px, 8px, black);
+  width: 100%;
+  min-height: "200px";
+}
+
+.card-icon {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+  right: -1.5rem;
+  bottom: -1.5rem;
+  background-color: #352121;
+  border-radius: 500px;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+}
+
+.title-flex {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 7px;
+  background-color: #352121;
+  color: #fafafa;
+  padding: 1rem;
+}
+
+.title {
+  font-weight: 700;
+}
+
+.card-body {
+  padding: 1rem;
+  color: #fafafa;
+}
+
+.dropdown {
+  position: fixed;
+  z-index: 99;
+  top: 2.5rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 0;
+  width: 150px;
+  box-shadow: 0, 4px, 8px, black;
+}
+
+.drop-inner {
+  width: 100%;
+  padding: 0.25rem;
+  border-radius: 7px;
+  background-color: #352121;
+}
+
+.drop-ul {
+  color: #fafafa;
+  padding: 0 2rem;
+  list-style: none;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  z-index: 99;
+  width: 100vw;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  filter: drop-shadow(0, 4px, 8px, black);
+  height: 2.5rem;
+  background-color: #352121;
+}
+
+.header-icon {
+  color: #fafafa;
+  margin: 0 0 0 1rem;
+  cursor: pointer;
+}
+
+.header-asset {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.h-a-toggle {
+  display: flex;
+  margin-right: 1rem;
+}
+
+.gear-icon {
+  color: #fafafa;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.side-nav {
+  position: fixed;
+  top: 2.5rem;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 0;
+  width: 200px;
+  box-shadow: 0, 4px, 8px, black;
+  left: 0.5rem;
+}
+
+.nav-inner {
+  width: 100%;
+  height: 90vh;
+  padding: 0.5rem;
+  border-radius: 7px;
+  background-color: #352121;
+}
+
+.nav-ul {
+  padding: 0 1rem;
+  color: #fafafa;
+  list-style: none;
+}
+
+.task-card {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin: 0 0.5rem;
+  padding: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 7px;
+  box-shadow: 0, 4px, 8px, black;
+  background-color: #fafafa;
+}
+
+.task-p {
+  color: #352121;
+}
