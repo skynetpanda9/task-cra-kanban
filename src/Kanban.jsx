@@ -11,49 +11,47 @@ const Kanban = () => {
   const [backData, setBackData] = useState([]);
 
   const fetchData = async () => {
-    const res = await fetch("http://192.168.1.234:5000/transaction");
+    const res = await fetch("http://localhost:5000/transaction");
     const { data } = await res.json();
     const sortData = data
       .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1))
       .map((data, i) => {
         return data;
       });
-
     setTransactions(sortData);
+  };
 
-    const sortFetchCol = () => {
-      const newArray = sortData.map((data) => {
-        return {
-          id: data._id,
-          Task: data.title,
-          Due_Date: data.createdAt,
-        };
-      });
-      setColumnData(newArray);
-      return newArray;
-    };
+  const sortFetchCol = async () => {
+    const newArray = await transactions?.map((data) => {
+      return {
+        id: data._id,
+        Task: data.title,
+        Due_Date: data.createdAt,
+        Category: data.category,
+      };
+    });
+    setColumnData(newArray);
+    return newArray;
+  };
 
-    try {
-      sortFetchCol()
-        .then(() => {
-          const backArray = sortData.map((data) => {
-            return {
-              title: data.category,
-              items: columnData,
-            };
-          });
-          setBackData(backArray);
-          return backArray;
-        })
-        .catch((err) => console.error(err));
-    } catch (error) {
-      console.error(console.error());
-    }
+  const sortFetchData = async (res) => {
+    const backArray = await res?.map((data) => {
+      return {
+        title: data.Category,
+        items: [],
+      };
+    });
+    setBackData(backArray);
+    return backArray;
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    sortFetchCol().then((res) => sortFetchData(res));
+  }, [transactions]);
 
   const data = [
     {
@@ -101,7 +99,7 @@ const Kanban = () => {
   console.log("columnData", columnData);
   console.log("backData", backData);
 
-  const [columns, setColumns] = useState(columnsFromBackend);
+  const [columns, setColumns] = useState(backData);
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
     const { source, destination } = result;
