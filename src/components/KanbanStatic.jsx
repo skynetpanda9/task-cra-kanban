@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const KanbanStatic = () => {
   const [loading, setLoading] = useState(false);
+  const [columns, setColumns] = useState();
 
   const date = new Date();
   const data = [
@@ -52,7 +53,13 @@ const KanbanStatic = () => {
     },
   };
 
-  const [columns, setColumns] = useState(columnsFromBackend);
+  localStorage.setItem("data", data);
+  localStorage.setItem("columnsFromBackend", columnsFromBackend);
+
+  useEffect(() => {
+    setLoading(false);
+    setColumns(JSON.parse(localStorage.getItem("columnsFromBackend")));
+  }, [setLoading]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
