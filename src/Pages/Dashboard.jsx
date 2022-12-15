@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import MainLayout from "../Layouts/MainLayout";
 import Header from "../components/Header";
 import "./index.css";
 import Kanban from "../components/Kanban";
+import KanbanStatic from "../components/KanbanStatic";
 
 function Dashboard() {
   return (
@@ -11,7 +13,7 @@ function Dashboard() {
         <Header />
         <MainLayout>
           <div className='dash-inner'>
-            <Kanban />
+            <KanbanStatic />
           </div>
         </MainLayout>
       </div>

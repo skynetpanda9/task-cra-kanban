@@ -3,72 +3,58 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
 import "./index.css";
+import { v4 as uuidv4 } from "uuid";
 
-const Kanban = () => {
+const KanbanStatic = () => {
   const [loading, setLoading] = useState(false);
-  const [columns, setColumns] = useState([]);
 
-  const fetchData = async () => {
-    setLoading(true);
-    const res = await fetch("http://localhost:5000/transaction");
-    const { data } = await res.json();
-    const sortData = data
-      .sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1))
-      .map((data, i) => {
-        return data;
-      });
-    return sortData;
+  const date = new Date();
+  const data = [
+    {
+      id: "1",
+      Task: "Task 1",
+      Due_Date: date,
+    },
+    {
+      id: "2",
+      Task: "Akash",
+      Due_Date: date,
+    },
+    {
+      id: "3",
+      Task: "Task 2",
+      Due_Date: date,
+    },
+    {
+      id: "4",
+      Task: "Mongo",
+      Due_Date: date,
+    },
+    {
+      id: "5",
+      Task: "Rocket",
+      Due_Date: date,
+    },
+  ];
+
+  const columnsFromBackend = {
+    [uuidv4()]: {
+      title: "To-do",
+      items: data,
+    },
+    [uuidv4()]: {
+      title: "In Progress",
+      items: [],
+    },
+    [uuidv4()]: {
+      title: "Done",
+      items: [],
+    },
   };
 
-  const sortFetchCol = async (res) => {
-    const newArray = res?.map((data, i) => {
-      return {
-        id: `${i + 1}`,
-        Task: data.title,
-        Due_Date: data.createdAt,
-        Category: data.category,
-      };
-    });
-    return newArray;
-  };
-
-  const finalArray = (res) => {
-    const todo = res.filter((el) => {
-      return el.Category === "To Do";
-    });
-    const progress = res.filter((el) => {
-      return el.Category === "In Progress";
-    });
-    const done = res.filter((el) => {
-      return el.Category === "Done";
-    });
-    const backdata = [
-      {
-        title: "To Do",
-        items: todo,
-      },
-      {
-        title: "In Progress",
-        items: progress,
-      },
-      {
-        title: "Done",
-        items: done,
-      },
-    ];
-    setColumns(backdata);
-  };
-
-  useEffect(() => {
-    fetchData()
-      .then((res) => sortFetchCol(res))
-      .then((res) => finalArray(res))
-      .then(() => setLoading(false));
-  }, []);
+  const [columns, setColumns] = useState(columnsFromBackend);
 
   const onDragEnd = (result, columns, setColumns) => {
-    console.log(`columns`, columns);
-    console.log(`result`, result);
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
@@ -136,4 +122,4 @@ const Kanban = () => {
   );
 };
 
-export default Kanban;
+export default KanbanStatic;
