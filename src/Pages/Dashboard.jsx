@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-lone-blocks */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import MainLayout from "../Layouts/MainLayout";
 import Header from "../components/Header";
 import "./index.css";
