@@ -1,14 +1,32 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Draggable } from "react-beautiful-dnd";
 import "./index.css";
 
-const TaskCard = ({ title }) => {
+const TaskCard = ({ item, index }) => {
   return (
-    <div className='task-card'>
-      <p className='task-p'>{title}</p>
-    </div>
+    <Draggable key={item.id} draggableId={item.id} index={index}>
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <div className='task-info'>
+            <p>{item.Task}</p>
+            <div className='secondary-details'>
+              <p>
+                <span>
+                  {new Date(item.Due_Date).toLocaleDateString("en-us", {
+                    month: "short",
+                    day: "2-digit",
+                  })}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </Draggable>
   );
 };
 

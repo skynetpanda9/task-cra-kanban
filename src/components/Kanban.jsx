@@ -2,15 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
-import { v4 as uuidv4 } from "uuid";
-import "./App.css";
+import "./index.css";
 
 const Kanban = () => {
-  const [transactions, setTransactions] = useState([]);
-  const [columnData, setColumnData] = useState([]);
-  const [backData, setBackData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [columns, setColumns] = useState([]);
 
   const fetchData = async () => {
+    setLoading(true);
     const res = await fetch("http://localhost:5000/transaction");
     const { data } = await res.json();
     const sortData = data
@@ -18,89 +17,57 @@ const Kanban = () => {
       .map((data, i) => {
         return data;
       });
-    setTransactions(sortData);
+    return sortData;
   };
 
-  const sortFetchCol = async () => {
-    const newArray = await transactions?.map((data) => {
+  const sortFetchCol = async (res) => {
+    const newArray = res?.map((data, i) => {
       return {
-        id: data._id,
+        id: `${i + 1}`,
         Task: data.title,
         Due_Date: data.createdAt,
         Category: data.category,
       };
     });
-    setColumnData(newArray);
     return newArray;
   };
 
-  const sortFetchData = async (res) => {
-    const backArray = await res?.map((data) => {
-      return {
-        title: data.Category,
-        items: [],
-      };
+  const finalArray = (res) => {
+    const todo = res.filter((el) => {
+      return el.Category === "To Do";
     });
-    setBackData(backArray);
-    return backArray;
+    const progress = res.filter((el) => {
+      return el.Category === "In Progress";
+    });
+    const done = res.filter((el) => {
+      return el.Category === "Done";
+    });
+    const backdata = [
+      {
+        title: "To Do",
+        items: todo,
+      },
+      {
+        title: "In Progress",
+        items: progress,
+      },
+      {
+        title: "Done",
+        items: done,
+      },
+    ];
+    setColumns(backdata);
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData()
+      .then((res) => sortFetchCol(res))
+      .then((res) => finalArray(res))
+      .then(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    sortFetchCol().then((res) => sortFetchData(res));
-  }, [transactions]);
-
-  const data = [
-    {
-      id: "1",
-      Task: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent.",
-      Due_Date: "25-May-2020",
-    },
-    {
-      id: "2",
-      Task: "Fix Styling",
-      Due_Date: "26-May-2020",
-    },
-    {
-      id: "3",
-      Task: "Handle Door Specs",
-      Due_Date: "27-May-2020",
-    },
-    {
-      id: "4",
-      Task: "morbi",
-      Due_Date: "23-Aug-2020",
-    },
-    {
-      id: "5",
-      Task: "proin",
-      Due_Date: "05-Jan-2021",
-    },
-  ];
-  const columnsFromBackend = {
-    [uuidv4()]: {
-      title: "To-do",
-      items: columnData,
-    },
-    [uuidv4()]: {
-      title: "In Progress",
-      items: [],
-    },
-    [uuidv4()]: {
-      title: "Done",
-      items: [],
-    },
-  };
-
-  console.log("transactions", transactions);
-  console.log("columnData", columnData);
-  console.log("backData", backData);
-
-  const [columns, setColumns] = useState(backData);
   const onDragEnd = (result, columns, setColumns) => {
+    console.log(`columns -> ${columns}`);
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
@@ -135,13 +102,15 @@ const Kanban = () => {
       });
     }
   };
-  return (
+  return loading ? (
+    "ok"
+  ) : (
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
       <div className='container'>
         <div className='tcs'>
-          {Object.entries(columns).map(([columnId, column], index) => {
+          {Object.entries(columns)?.map(([columnId, column], index) => {
             return (
               <Droppable key={columnId} droppableId={columnId}>
                 {(provided, snapshot) => (
@@ -152,7 +121,7 @@ const Kanban = () => {
                   >
                     <div className='title'>{column.title}</div>
                     {column.items.map((item, index) => (
-                      <TaskCard key={item} item={item} index={index} />
+                      <TaskCard key={item.id} item={item} index={index} />
                     ))}
                     {provided.placeholder}
                   </div>
