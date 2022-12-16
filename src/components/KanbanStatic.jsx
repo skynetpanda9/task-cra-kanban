@@ -4,10 +4,14 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
 import "./index.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
+import NewTask from "./NewTask";
 
 const KanbanStatic = () => {
   const [loading, setLoading] = useState(false);
   const [columns, setColumns] = useState([]);
+  const [add, setAdd] = useState(false);
 
   const date = new Date();
   const datainit = [
@@ -131,17 +135,6 @@ const KanbanStatic = () => {
           },
         })
       );
-      // console.log("dragEnd----> ", {
-      //   ...columns,
-      //   [source.droppableId]: {
-      //     ...sourceColumn,
-      //     items: sourceItems,
-      //   },
-      //   [destination.droppableId]: {
-      //     ...destColumn,
-      //     items: destItems,
-      //   },
-      // });
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -164,13 +157,6 @@ const KanbanStatic = () => {
           },
         })
       );
-      // console.log("dragEnd", {
-      //   ...columns,
-      //   [source.droppableId]: {
-      //     ...column,
-      //     items: copiedItems,
-      //   },
-      // });
     }
   };
   return loading ? (
@@ -194,10 +180,29 @@ const KanbanStatic = () => {
                       <div className='title'>{column?.title}</div>
                     )}
                     {column?.items !== "undefined" &&
-                      column?.items.map((item, index) => (
-                        <TaskCard key={item.id} item={item} index={index} />
-                      ))}
+                      column?.items.map((item, index) => {
+                        //console.log(Object.entries(item).length + 1);
+                        return (
+                          <TaskCard key={item.id} item={item} index={index} />
+                        );
+                      })}
                     {provided.placeholder}
+                    {/* {Object.values(columns).map((el) => {
+                      return console.log(el);
+                    })} */}
+                    {columnId === "0" && (
+                      <div>
+                        {add && <NewTask onClose={() => setAdd(false)} />}
+                        <div
+                          className='add-task'
+                          onClick={() => {
+                            setAdd(true);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPlus} />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </Droppable>
