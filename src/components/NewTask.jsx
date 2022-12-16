@@ -17,16 +17,6 @@ const NewTask = ({ onClose }) => {
   const parsed = JSON.parse(upData);
   console.log("sdfsf", parsed);
 
-  function insertObject(arr, obj) {
-    // append object
-    arr = [...arr, obj];
-
-    console.log(arr);
-  }
-
-  let array = parsed;
-  let object = form;
-
   const handleInput = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -37,7 +27,12 @@ const NewTask = ({ onClose }) => {
       alert(`Task shouldn't be empty!`);
     } else {
       alert(JSON.stringify(form));
-      insertObject(array, object);
+      function insertObject(arr, obj) {
+        // append object
+        let finArr = [...arr, obj];
+        console.log(finArr);
+      }
+      insertObject([parsed], form);
       onClose();
     }
   };
