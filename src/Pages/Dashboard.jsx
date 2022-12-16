@@ -14,6 +14,7 @@ function Dashboard() {
         <MainLayout>
           <div className='dash-inner'>
             <KanbanStatic />
+            {/* <Kanban /> */}
           </div>
         </MainLayout>
       </div>
