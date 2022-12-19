@@ -2,23 +2,25 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
-import { v4 as uuid } from "uuid";
 
-const NewTask = ({ onClose }) => {
+const NewTask = ({ dataInit, setData, category, onClose }) => {
+  const [cat] = useState(category);
+
   const date = new Date();
   const [form, setForm] = useState({
-    id: uuid(),
-    Category: "To Do",
+    id: `${dataInit.length + 1}`,
     Task: "",
+    Category: cat,
     Due_Date: date,
   });
 
-  const upData = localStorage.getItem("updatedData");
-  const parsed = JSON.parse(upData);
-  console.log("sdfsf", parsed);
-
   const handleInput = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const insertObject = (arr, obj) => {
+    let finArr = [...arr, obj];
+    return finArr;
   };
 
   const handleSubmit = (event) => {
@@ -26,13 +28,8 @@ const NewTask = ({ onClose }) => {
     if (form.Task === "") {
       alert(`Task shouldn't be empty!`);
     } else {
-      alert(JSON.stringify(form));
-      function insertObject(arr, obj) {
-        // append object
-        let finArr = [...arr, obj];
-        console.log(finArr);
-      }
-      insertObject([parsed], form);
+      let newData = insertObject(dataInit, form);
+      setData(newData);
       onClose();
     }
   };

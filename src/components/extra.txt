@@ -30,3 +30,17 @@ const datainit = [
       Due_Date: date,
     },
   ];
+
+
+  // const data = await newArray?.map((res) => {
+  //   return res;
+  // });
+  // const todo = data.filter((el) => {
+  //   return el.Category === "To Do";
+  // });
+  // const progress = data.filter((el) => {
+  //   return el.Category === "In Progress";
+  // });
+  // const done = data.filter((el) => {
+  //   return el.Category === "Done";
+  // });

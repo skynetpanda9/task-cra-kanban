@@ -10,11 +10,13 @@ import NewTask from "./NewTask";
 
 const KanbanStatic = () => {
   const [loading, setLoading] = useState(false);
+  const [add1, setAdd1] = useState(false);
+  const [add2, setAdd2] = useState(false);
+  const [add3, setAdd3] = useState(false);
   const [columns, setColumns] = useState([]);
-  const [add, setAdd] = useState(false);
 
   const date = new Date();
-  const datainit = [
+  const dataInit = [
     {
       id: "1",
       Category: "To Do",
@@ -39,66 +41,79 @@ const KanbanStatic = () => {
       Category: "Done",
       Due_Date: date,
     },
-    {
-      id: "5",
-      Task: "Rocket",
-      Category: "Done",
-      Due_Date: date,
-    },
   ];
 
-  const backData = localStorage.getItem("backData");
-  const upData = localStorage.getItem("updatedData");
+  const [newArray, setNewArray] = useState(dataInit);
 
-  const settingInitialData = () => {
-    const data = datainit.map((res) => {
-      return res;
-    });
-
-    const todo = data.filter((el) => {
+  const settingInitialData = async () => {
+    setLoading(true);
+    const todo = dataInit.filter((el) => {
       return el.Category === "To Do";
     });
-    const progress = data.filter((el) => {
+    const progress = dataInit.filter((el) => {
       return el.Category === "In Progress";
     });
-    const done = data.filter((el) => {
+    const done = dataInit.filter((el) => {
       return el.Category === "Done";
     });
 
-    const backStaticdata = [
-      {
-        title: "To Do",
-        items: todo,
-      },
-      {
-        title: "In Progress",
-        items: progress,
-      },
-      {
-        title: "Done",
-        items: done,
-      },
-    ];
-    setColumns(backStaticdata);
-    localStorage.setItem("backData", JSON.stringify(backStaticdata));
-  };
-
-  const settingUpdatedData = () => {
-    setColumns(JSON.parse(upData));
+    return { todo, progress, done };
   };
 
   useEffect(() => {
-    if (!backData) {
-      settingInitialData();
-    } else {
-      if (backData && !upData) {
-        const backData = localStorage.getItem("backData");
-        setColumns(JSON.parse(backData));
-      } else if (upData) {
-        settingUpdatedData();
-      }
-    }
+    settingInitialData().then((res) => {
+      const backStaticData = [
+        {
+          title: "To Do",
+          items: res.todo,
+        },
+        {
+          title: "In Progress",
+          items: res.progress,
+        },
+        {
+          title: "Done",
+          items: res.done,
+        },
+      ];
+      setColumns(backStaticData);
+      setLoading(false);
+    });
   }, []);
+
+  console.log("data", newArray);
+  const setNewData = async () => {
+    console.log("data", newArray);
+    const NewTodo = newArray.filter((el) => {
+      return el.Category === "To Do";
+    });
+    const newProgress = newArray.filter((el) => {
+      return el.Category === "In Progress";
+    });
+    const newDone = newArray.filter((el) => {
+      return el.Category === "Done";
+    });
+
+    const backStaticData = [
+      {
+        title: "To Do",
+        items: NewTodo,
+      },
+      {
+        title: "In Progress",
+        items: newProgress,
+      },
+      {
+        title: "Done",
+        items: newDone,
+      },
+    ];
+    setColumns(backStaticData);
+  };
+
+  useEffect(() => {
+    setNewData();
+  }, [newArray]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -121,20 +136,20 @@ const KanbanStatic = () => {
           items: destItems,
         },
       });
-      localStorage.setItem(
-        "updatedData",
-        JSON.stringify({
-          ...columns,
-          [source.droppableId]: {
-            ...sourceColumn,
-            items: sourceItems,
-          },
-          [destination.droppableId]: {
-            ...destColumn,
-            items: destItems,
-          },
-        })
-      );
+      // localStorage.setItem(
+      //   "updatedData",
+      //   JSON.stringify({
+      //     ...columns,
+      //     [source.droppableId]: {
+      //       ...sourceColumn,
+      //       items: sourceItems,
+      //     },
+      //     [destination.droppableId]: {
+      //       ...destColumn,
+      //       items: destItems,
+      //     },
+      //   })
+      // );
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -147,18 +162,19 @@ const KanbanStatic = () => {
           items: copiedItems,
         },
       });
-      localStorage.setItem(
-        "updatedData",
-        JSON.stringify({
-          ...columns,
-          [source.droppableId]: {
-            ...column,
-            items: copiedItems,
-          },
-        })
-      );
+      // localStorage.setItem(
+      //   "updatedData",
+      //   JSON.stringify({
+      //     ...columns,
+      //     [source.droppableId]: {
+      //       ...column,
+      //       items: copiedItems,
+      //     },
+      //   })
+      // );
     }
   };
+
   return loading ? (
     "ok"
   ) : (
@@ -168,6 +184,7 @@ const KanbanStatic = () => {
       <div className='container'>
         <div className='tcs'>
           {Object.entries(columns)?.map(([columnId, column], index) => {
+            //console.log(column.items.length);
             return (
               <Droppable key={columnId} droppableId={columnId}>
                 {(provided, snapshot) => (
@@ -177,26 +194,76 @@ const KanbanStatic = () => {
                     {...provided.droppableProps}
                   >
                     {column?.title !== "undefined" && (
-                      <div className='title'>{column?.title}</div>
+                      <div className='title'>
+                        {column?.title}
+                        <div>{column.items.length}</div>
+                      </div>
                     )}
                     {column?.items !== "undefined" &&
                       column?.items.map((item, index) => {
-                        //console.log(Object.entries(item).length + 1);
                         return (
                           <TaskCard key={item.id} item={item} index={index} />
                         );
                       })}
                     {provided.placeholder}
-                    {/* {Object.values(columns).map((el) => {
-                      return console.log(el);
-                    })} */}
-                    {columnId === "0" && (
+                    {columnId === "0" ? (
                       <div>
-                        {add && <NewTask onClose={() => setAdd(false)} />}
+                        {add1 && (
+                          <NewTask
+                            dataInit={newArray}
+                            category={"To Do"}
+                            setData={setNewArray}
+                            onClose={() => setAdd1(false)}
+                          />
+                        )}
                         <div
                           className='add-task'
                           onClick={() => {
-                            setAdd(true);
+                            setAdd1(true);
+                            setAdd2(false);
+                            setAdd3(false);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPlus} />
+                        </div>
+                      </div>
+                    ) : columnId === "1" ? (
+                      <div>
+                        {add2 && (
+                          <NewTask
+                            dataInit={newArray}
+                            category={"In Progress"}
+                            setData={setNewArray}
+                            onClose={() => setAdd2(false)}
+                          />
+                        )}
+                        <div
+                          className='add-task'
+                          onClick={() => {
+                            setAdd1(false);
+                            setAdd2(true);
+                            setAdd3(false);
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faPlus} />
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        {add3 && (
+                          <NewTask
+                            dataInit={newArray}
+                            category={"Done"}
+                            setData={setNewArray}
+                            onClose={() => setAdd3(false)}
+                          />
+                        )}
+                        <div
+                          className='add-task'
+                          onClick={() => {
+                            setAdd1(false);
+                            setAdd2(false);
+                            setAdd3(true);
                           }}
                         >
                           <FontAwesomeIcon icon={faPlus} />
