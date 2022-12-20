@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
+import { v4 as uuid } from "uuid";
 
 const NewTask = ({ dataInit, setData, category, onClose }) => {
   const [cat] = useState(category);
 
+  //`${dataInit.length + 1}`
+
   const date = new Date();
   const [form, setForm] = useState({
-    id: `${dataInit.length + 1}`,
+    id: uuid(),
     Task: "",
     Category: cat,
     Due_Date: date,
@@ -29,6 +32,7 @@ const NewTask = ({ dataInit, setData, category, onClose }) => {
       alert(`Task shouldn't be empty!`);
     } else {
       let newData = insertObject(dataInit, form);
+      console.log(newData);
       setData(newData);
       onClose();
     }

@@ -7,36 +7,40 @@ import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 import NewTask from "./NewTask";
+import { v4 as uuid } from "uuid";
 
 const KanbanStatic = () => {
   const [loading, setLoading] = useState(false);
   const [add1, setAdd1] = useState(false);
   const [add2, setAdd2] = useState(false);
   const [add3, setAdd3] = useState(false);
+  const [newTodo, setNewTodo] = useState([]);
+  const [newProgress, setNewProgress] = useState([]);
+  const [newDone, setNewDone] = useState([]);
   const [columns, setColumns] = useState([]);
 
   const date = new Date();
   const dataInit = [
     {
-      id: "1",
+      id: uuid(),
       Category: "To Do",
       Task: "Task 1",
       Due_Date: date,
     },
     {
-      id: "2",
+      id: uuid(),
       Task: "Akash",
-      Category: "In Progress",
-      Due_Date: date,
-    },
-    {
-      id: "3",
-      Task: "Task 2",
       Category: "To Do",
       Due_Date: date,
     },
     {
-      id: "4",
+      id: uuid(),
+      Task: "Task 2",
+      Category: "In Progress",
+      Due_Date: date,
+    },
+    {
+      id: uuid(),
       Task: "Mongo",
       Category: "Done",
       Due_Date: date,
@@ -47,6 +51,7 @@ const KanbanStatic = () => {
 
   const settingInitialData = async () => {
     setLoading(true);
+
     const todo = dataInit.filter((el) => {
       return el.Category === "To Do";
     });
@@ -61,6 +66,7 @@ const KanbanStatic = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     settingInitialData().then((res) => {
       const backStaticData = [
         {
@@ -76,49 +82,20 @@ const KanbanStatic = () => {
           items: res.done,
         },
       ];
+      setNewTodo(res.todo);
+      setNewProgress(res.progress);
+      setNewDone(res.done);
       setColumns(backStaticData);
       setLoading(false);
     });
   }, []);
 
-  console.log("data", newArray);
-  const setNewData = async () => {
-    console.log("data", newArray);
-    const NewTodo = newArray.filter((el) => {
-      return el.Category === "To Do";
-    });
-    const newProgress = newArray.filter((el) => {
-      return el.Category === "In Progress";
-    });
-    const newDone = newArray.filter((el) => {
-      return el.Category === "Done";
-    });
-
-    const backStaticData = [
-      {
-        title: "To Do",
-        items: NewTodo,
-      },
-      {
-        title: "In Progress",
-        items: newProgress,
-      },
-      {
-        title: "Done",
-        items: newDone,
-      },
-    ];
-    setColumns(backStaticData);
-  };
-
-  useEffect(() => {
-    setNewData();
-  }, [newArray]);
-
   const onDragEnd = (result, columns, setColumns) => {
+    // console.log("result", result);
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
+      let dataInitCopy = [];
       const sourceColumn = columns[source.droppableId];
       const destColumn = columns[destination.droppableId];
       const sourceItems = [...sourceColumn.items];
@@ -136,20 +113,27 @@ const KanbanStatic = () => {
           items: destItems,
         },
       });
-      // localStorage.setItem(
-      //   "updatedData",
-      //   JSON.stringify({
-      //     ...columns,
-      //     [source.droppableId]: {
-      //       ...sourceColumn,
-      //       items: sourceItems,
-      //     },
-      //     [destination.droppableId]: {
-      //       ...destColumn,
-      //       items: destItems,
-      //     },
-      //   })
-      // );
+      const cate =
+        destination.droppableId === "0"
+          ? "To Do"
+          : destination.droppableId === "1"
+          ? "In Progress"
+          : "Done";
+
+      destination.droppableId === "0"
+        ? (dataInitCopy = [...newTodo])
+        : destination.droppableId === "1"
+        ? (dataInitCopy = [...newProgress])
+        : (dataInitCopy = [...newDone]);
+
+      const targetIndex = dataInitCopy.findIndex(
+        (f) => f.id === result.draggableId
+      );
+      console.log("dataInitCopy", dataInitCopy);
+      dataInitCopy[targetIndex].Category = cate;
+      console.log([...newTodo]);
+      console.log([...newProgress]);
+      console.log([...newDone]);
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -162,18 +146,45 @@ const KanbanStatic = () => {
           items: copiedItems,
         },
       });
-      // localStorage.setItem(
-      //   "updatedData",
-      //   JSON.stringify({
-      //     ...columns,
-      //     [source.droppableId]: {
-      //       ...column,
-      //       items: copiedItems,
-      //     },
-      //   })
-      // );
+
+      //const dataInitCopy = [...newArray];
+      const dataInitCopy =
+        destination.droppableId === "0"
+          ? [...newTodo]
+          : destination.droppableId === "1"
+          ? [...newProgress]
+          : [...newDone];
+      const targetIndex = dataInitCopy.findIndex(
+        (f) => f.id === result.draggableId
+      );
+
+      // const id = `${source.index + 1}`;
+      // dataInitCopy[targetIndex].id = id;
+
+      console.log("source.index", source.index);
+      console.log("destination.index", destination.index);
+      console.log("copiedItems", copiedItems);
+      // console.log("result.draggableId", result.draggableId);
     }
   };
+
+  useEffect(() => {
+    const backStaticData = [
+      {
+        title: "To Do",
+        items: newTodo,
+      },
+      {
+        title: "In Progress",
+        items: newProgress,
+      },
+      {
+        title: "Done",
+        items: newDone,
+      },
+    ];
+    setColumns(backStaticData);
+  }, [newTodo, newProgress, newDone]);
 
   return loading ? (
     "ok"
@@ -210,9 +221,9 @@ const KanbanStatic = () => {
                       <div>
                         {add1 && (
                           <NewTask
-                            dataInit={newArray}
+                            dataInit={newTodo}
                             category={"To Do"}
-                            setData={setNewArray}
+                            setData={setNewTodo}
                             onClose={() => setAdd1(false)}
                           />
                         )}
@@ -231,9 +242,9 @@ const KanbanStatic = () => {
                       <div>
                         {add2 && (
                           <NewTask
-                            dataInit={newArray}
+                            dataInit={newProgress}
                             category={"In Progress"}
-                            setData={setNewArray}
+                            setData={setNewProgress}
                             onClose={() => setAdd2(false)}
                           />
                         )}
@@ -252,9 +263,9 @@ const KanbanStatic = () => {
                       <div>
                         {add3 && (
                           <NewTask
-                            dataInit={newArray}
+                            dataInit={newDone}
                             category={"Done"}
-                            setData={setNewArray}
+                            setData={setNewDone}
                             onClose={() => setAdd3(false)}
                           />
                         )}
