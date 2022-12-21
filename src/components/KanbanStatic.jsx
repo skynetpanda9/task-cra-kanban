@@ -23,35 +23,31 @@ const KanbanStatic = () => {
   const dataInit = [
     {
       id: uuid(),
-      Category: "To Do",
       Task: "Task 1",
-      Due_Date: date,
-    },
-    {
-      id: uuid(),
-      Task: "Akash",
       Category: "To Do",
       Due_Date: date,
     },
     {
       id: uuid(),
       Task: "Task 2",
+      Category: "To Do",
+      Due_Date: date,
+    },
+    {
+      id: uuid(),
+      Task: "Task 3",
       Category: "In Progress",
       Due_Date: date,
     },
     {
       id: uuid(),
-      Task: "Mongo",
+      Task: "Task 4",
       Category: "Done",
       Due_Date: date,
     },
   ];
 
-  const [newArray, setNewArray] = useState(dataInit);
-
-  const settingInitialData = async () => {
-    setLoading(true);
-
+  const setData = () => {
     const todo = dataInit.filter((el) => {
       return el.Category === "To Do";
     });
@@ -62,111 +58,31 @@ const KanbanStatic = () => {
       return el.Category === "Done";
     });
 
-    return { todo, progress, done };
+    // console.log(newTodo.length);
+
+    const backStaticData = [
+      {
+        title: "To Do",
+        items: todo.length ? newTodo : todo,
+      },
+      {
+        title: "In Progress",
+        items: progress.length ? newProgress : progress,
+      },
+      {
+        title: "Done",
+        items: done.length ? newDone : done,
+      },
+    ];
+    setColumns(backStaticData);
+    setNewTodo(todo);
+    setNewProgress(progress);
+    setNewDone(done);
   };
 
   useEffect(() => {
-    setLoading(true);
-    settingInitialData().then((res) => {
-      const backStaticData = [
-        {
-          title: "To Do",
-          items: res.todo,
-        },
-        {
-          title: "In Progress",
-          items: res.progress,
-        },
-        {
-          title: "Done",
-          items: res.done,
-        },
-      ];
-      setNewTodo(res.todo);
-      setNewProgress(res.progress);
-      setNewDone(res.done);
-      setColumns(backStaticData);
-      setLoading(false);
-    });
+    setData();
   }, []);
-
-  const onDragEnd = (result, columns, setColumns) => {
-    // console.log("result", result);
-    if (!result.destination) return;
-    const { source, destination } = result;
-    if (source.droppableId !== destination.droppableId) {
-      let dataInitCopy = [];
-      const sourceColumn = columns[source.droppableId];
-      const destColumn = columns[destination.droppableId];
-      const sourceItems = [...sourceColumn.items];
-      const destItems = [...destColumn.items];
-      const [removed] = sourceItems.splice(source.index, 1);
-      destItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          items: destItems,
-        },
-      });
-      const cate =
-        destination.droppableId === "0"
-          ? "To Do"
-          : destination.droppableId === "1"
-          ? "In Progress"
-          : "Done";
-
-      destination.droppableId === "0"
-        ? (dataInitCopy = [...newTodo])
-        : destination.droppableId === "1"
-        ? (dataInitCopy = [...newProgress])
-        : (dataInitCopy = [...newDone]);
-
-      const targetIndex = dataInitCopy.findIndex(
-        (f) => f.id === result.draggableId
-      );
-      console.log("dataInitCopy", dataInitCopy);
-      dataInitCopy[targetIndex].Category = cate;
-      console.log([...newTodo]);
-      console.log([...newProgress]);
-      console.log([...newDone]);
-    } else {
-      const column = columns[source.droppableId];
-      const copiedItems = [...column.items];
-      const [removed] = copiedItems.splice(source.index, 1);
-      copiedItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...column,
-          items: copiedItems,
-        },
-      });
-
-      //const dataInitCopy = [...newArray];
-      const dataInitCopy =
-        destination.droppableId === "0"
-          ? [...newTodo]
-          : destination.droppableId === "1"
-          ? [...newProgress]
-          : [...newDone];
-      const targetIndex = dataInitCopy.findIndex(
-        (f) => f.id === result.draggableId
-      );
-
-      // const id = `${source.index + 1}`;
-      // dataInitCopy[targetIndex].id = id;
-
-      console.log("source.index", source.index);
-      console.log("destination.index", destination.index);
-      console.log("copiedItems", copiedItems);
-      // console.log("result.draggableId", result.draggableId);
-    }
-  };
 
   useEffect(() => {
     const backStaticData = [
@@ -185,6 +101,133 @@ const KanbanStatic = () => {
     ];
     setColumns(backStaticData);
   }, [newTodo, newProgress, newDone]);
+
+  const onDragEnd = (result, columns, setColumns) => {
+    setLoading(true);
+    if (!result.destination) return;
+    const { source, destination } = result;
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[source.droppableId];
+      const destColumn = columns[destination.droppableId];
+      const sourceItems = [...sourceColumn.items];
+      const destItems = [...destColumn.items];
+      const [removed] = sourceItems.splice(source.index, 1);
+      destItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...sourceColumn,
+          items: sourceItems,
+        },
+        [destination.droppableId]: {
+          ...destColumn,
+          items: destItems,
+        },
+      });
+      if (source.droppableId === "0" && destination.droppableId === "1") {
+        const cate = "In Progress";
+        const targetIndex = destItems.findIndex(
+          (f) => f.id === result.draggableId
+        );
+        destItems[targetIndex].Category = cate;
+        setNewTodo(sourceItems);
+        setNewProgress(destItems);
+        setLoading(false);
+      } else if (
+        source.droppableId === "1" &&
+        destination.droppableId === "2"
+      ) {
+        const cate = "Done";
+        const targetIndex = destItems.findIndex(
+          (f) => f.id === result.draggableId
+        );
+        destItems[targetIndex].Category = cate;
+        setNewDone(destItems);
+        setNewProgress(sourceItems);
+        setLoading(false);
+      } else if (
+        source.droppableId === "2" &&
+        destination.droppableId === "1"
+      ) {
+        const cate = "In Progress";
+        const targetIndex = destItems.findIndex(
+          (f) => f.id === result.draggableId
+        );
+        destItems[targetIndex].Category = cate;
+        setNewProgress(destItems);
+        setNewDone(sourceItems);
+        setLoading(false);
+      } else if (
+        source.droppableId === "1" &&
+        destination.droppableId === "0"
+      ) {
+        const cate = "To Do";
+        const targetIndex = destItems.findIndex(
+          (f) => f.id === result.draggableId
+        );
+        destItems[targetIndex].Category = cate;
+        setNewTodo(destItems);
+        setNewProgress(sourceItems);
+        setLoading(false);
+      } else if (
+        source.droppableId === "0" &&
+        destination.droppableId === "2"
+      ) {
+        const cate = "Done";
+        const targetIndex = destItems.findIndex(
+          (f) => f.id === result.draggableId
+        );
+        destItems[targetIndex].Category = cate;
+        setNewDone(destItems);
+        setNewTodo(sourceItems);
+        setLoading(false);
+      } else if (
+        source.droppableId === "2" &&
+        destination.droppableId === "0"
+      ) {
+        const cate = "To Do";
+        const targetIndex = destItems.findIndex(
+          (f) => f.id === result.draggableId
+        );
+        destItems[targetIndex].Category = cate;
+        setNewTodo(destItems);
+        setNewDone(sourceItems);
+        setLoading(false);
+      }
+    } else {
+      const column = columns[source.droppableId];
+      const copiedItems = [...column.items];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...column,
+          items: copiedItems,
+        },
+      });
+      if (source.droppableId === "0" && destination.droppableId === "0") {
+        setNewTodo(copiedItems);
+        setLoading(false);
+      } else if (
+        source.droppableId === "1" &&
+        destination.droppableId === "1"
+      ) {
+        setNewProgress(copiedItems);
+        setLoading(false);
+      } else if (
+        source.droppableId === "2" &&
+        destination.droppableId === "2"
+      ) {
+        setNewDone(copiedItems);
+        setLoading(false);
+      }
+    }
+  };
+
+  // console.log("newTodo", newTodo);
+  // console.log("newProgress", newProgress);
+  // console.log("newDone", newDone);
 
   return loading ? (
     "ok"
@@ -223,7 +266,7 @@ const KanbanStatic = () => {
                           <NewTask
                             dataInit={newTodo}
                             category={"To Do"}
-                            setData={setNewTodo}
+                            setNewData={setNewTodo}
                             onClose={() => setAdd1(false)}
                           />
                         )}
@@ -244,7 +287,7 @@ const KanbanStatic = () => {
                           <NewTask
                             dataInit={newProgress}
                             category={"In Progress"}
-                            setData={setNewProgress}
+                            setNewData={setNewProgress}
                             onClose={() => setAdd2(false)}
                           />
                         )}
@@ -265,7 +308,7 @@ const KanbanStatic = () => {
                           <NewTask
                             dataInit={newDone}
                             category={"Done"}
-                            setData={setNewDone}
+                            setNewData={setNewDone}
                             onClose={() => setAdd3(false)}
                           />
                         )}

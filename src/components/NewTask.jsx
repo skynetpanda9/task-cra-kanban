@@ -4,16 +4,13 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import { v4 as uuid } from "uuid";
 
-const NewTask = ({ dataInit, setData, category, onClose }) => {
-  const [cat] = useState(category);
-
-  //`${dataInit.length + 1}`
-
+const NewTask = ({ dataInit, setNewData, category, onClose }) => {
+  //const [cat] = useState(category);
   const date = new Date();
   const [form, setForm] = useState({
     id: uuid(),
     Task: "",
-    Category: cat,
+    Category: category,
     Due_Date: date,
   });
 
@@ -32,8 +29,7 @@ const NewTask = ({ dataInit, setData, category, onClose }) => {
       alert(`Task shouldn't be empty!`);
     } else {
       let newData = insertObject(dataInit, form);
-      console.log(newData);
-      setData(newData);
+      setNewData(newData);
       onClose();
     }
   };
