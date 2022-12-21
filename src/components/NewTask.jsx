@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import "./index.css";
 import { v4 as uuid } from "uuid";
 
 const NewTask = ({ dataInit, setNewData, category, onClose }) => {
@@ -36,9 +35,9 @@ const NewTask = ({ dataInit, setNewData, category, onClose }) => {
 
   return (
     <div>
-      <form className='input-group' onSubmit={handleSubmit}>
+      <form className='flex flex-row w-full mt-4' onSubmit={handleSubmit}>
         <input
-          className='input-task'
+          className='flex flex-row rounded-md p-4 border-none text-base bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-300 focus:outline-none focus:bg-gray-300 focus:text-gray-900'
           value={form.Task}
           name='Task'
           type='text'
@@ -46,7 +45,10 @@ const NewTask = ({ dataInit, setNewData, category, onClose }) => {
           onChange={handleInput}
           placeholder='Add Task'
         />
-        <button className='button' type='submit'>
+        <button
+          className='block w-full ml-2 rounded-md border-none text-gray-300 bg-gray-900 shadow-md hover:bg-green-700'
+          type='submit'
+        >
           <FontAwesomeIcon icon={faCheck} />
         </button>
       </form>

@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
-import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import NewTask from "./NewTask";
 import { v4 as uuid } from "uuid";
+import { useOnClickOutside } from "../utils/ClickOutside";
 
 const KanbanStatic = () => {
+  const ref = useRef();
   const [loading, setLoading] = useState(false);
   const [add1, setAdd1] = useState(false);
   const [add2, setAdd2] = useState(false);
@@ -18,6 +19,11 @@ const KanbanStatic = () => {
   const [newProgress, setNewProgress] = useState([]);
   const [newDone, setNewDone] = useState([]);
   const [columns, setColumns] = useState([]);
+
+  //utils
+  useOnClickOutside(ref, () => setAdd1(false));
+  useOnClickOutside(ref, () => setAdd2(false));
+  useOnClickOutside(ref, () => setAdd3(false));
 
   const date = new Date();
   const dataInit = [
@@ -58,20 +64,18 @@ const KanbanStatic = () => {
       return el.Category === "Done";
     });
 
-    // console.log(newTodo.length);
-
     const backStaticData = [
       {
         title: "To Do",
-        items: todo.length ? newTodo : todo,
+        items: todo,
       },
       {
         title: "In Progress",
-        items: progress.length ? newProgress : progress,
+        items: progress,
       },
       {
         title: "Done",
-        items: done.length ? newDone : done,
+        items: done,
       },
     ];
     setColumns(backStaticData);
@@ -235,21 +239,23 @@ const KanbanStatic = () => {
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
-      <div className='container'>
-        <div className='tcs'>
+      <div className='flex'>
+        <div
+          ref={ref}
+          className='flex items-start justify-center min-h-[90vh] w-full m-2'
+        >
           {Object.entries(columns)?.map(([columnId, column], index) => {
-            //console.log(column.items.length);
             return (
               <Droppable key={columnId} droppableId={columnId}>
                 {(provided, snapshot) => (
                   <div
-                    className='tasklist'
+                    className='min-h-[100px] flex flex-col bg-gray-400 dark:bg-gray-800 min-w-[350px] rounded-md p-4 mr-6'
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                   >
                     {column?.title !== "undefined" && (
-                      <div className='title'>
-                        {column?.title}
+                      <div className='text-gray-100 bg-gray-600 dark:bg-gray-900 p-2 w-full rounded-md flex flex-row justify-between items-center'>
+                        <div className='font-semibold'> {column?.title}</div>
                         <div>{column.items.length}</div>
                       </div>
                     )}
@@ -271,7 +277,7 @@ const KanbanStatic = () => {
                           />
                         )}
                         <div
-                          className='add-task'
+                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
                           onClick={() => {
                             setAdd1(true);
                             setAdd2(false);
@@ -292,7 +298,7 @@ const KanbanStatic = () => {
                           />
                         )}
                         <div
-                          className='add-task'
+                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800  dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
                           onClick={() => {
                             setAdd1(false);
                             setAdd2(true);
@@ -313,7 +319,7 @@ const KanbanStatic = () => {
                           />
                         )}
                         <div
-                          className='add-task'
+                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800  dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
                           onClick={() => {
                             setAdd1(false);
                             setAdd2(false);

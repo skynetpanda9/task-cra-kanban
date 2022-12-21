@@ -1,12 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import React from "react";
-import "./index.css";
 
 const MainLayout = (props) => {
   return (
-    <div className='main-layout'>
-      <div className='main-props'>{props.children}</div>
+    <div className='flex flex-col relative my-2 justify-center items-center w-full px-4 box-border min-h-screen overflow-y-auto'>
+      <div className='flex flex-col w-full justify-start min-h-screen'>
+        {props.children}
+      </div>
     </div>
   );
 };
