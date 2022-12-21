@@ -10,7 +10,7 @@ const TaskCard = ({ item, index }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className='backdrop-blur-sm bg-white/30 dark:bg-gray-500/20 flex flex-col justify-center items-start py-0 px-4 min-h-[90px] rounded-md max-w-xs bg-gray-300 dark:bg-gray-700 mt-4 shadow-md'>
+          <div className='backdrop-blur-sm bg-white/30 dark:bg-gray-500/20 flex flex-col justify-center items-start py-0 px-4 h-[100px] rounded-md w-auto bg-gray-300 dark:bg-gray-700 mt-4 shadow-md'>
             <p className='font-medium text-gray-800 dark:text-gray-200'>
               {item.Task}
             </p>

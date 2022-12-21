@@ -239,26 +239,28 @@ const KanbanStatic = () => {
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
-      <div className='flex'>
-        <div
-          ref={ref}
-          className='flex items-start justify-center min-h-[90vh] w-full m-2'
-        >
-          {Object.entries(columns)?.map(([columnId, column], index) => {
-            return (
-              <Droppable key={columnId} droppableId={columnId}>
-                {(provided, snapshot) => (
-                  <div
-                    className='min-h-[100px] flex flex-col bg-gray-400 dark:bg-gray-800 min-w-[350px] rounded-md p-4 mr-6'
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
+      <div
+        ref={ref}
+        className='grid grid-cols-1 sm:grid-cols-2 w-full sm:gap-4 lg:grid-cols-3 lg:gap-4 xl:w-11/12'
+      >
+        {Object.entries(columns)?.map(([columnId, column], index) => {
+          return (
+            <Droppable key={columnId} droppableId={columnId}>
+              {(provided, snapshot) => (
+                <div
+                  className='h-[50vh] lg:h-[90vh] flex flex-col justify-start bg-gray-400 dark:bg-gray-800 w-full rounded-md p-4 mb-2'
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  <div className='z-30'>
                     {column?.title !== "undefined" && (
-                      <div className='text-gray-100 bg-gray-600 dark:bg-gray-900 p-2 w-full rounded-md flex flex-row justify-between items-center'>
+                      <div className='text-gray-100 bg-gray-600 dark:bg-gray-900 px-4 py-2 w-full rounded-md flex flex-row justify-between items-center'>
                         <div className='font-semibold'> {column?.title}</div>
                         <div>{column.items.length}</div>
                       </div>
                     )}
+                  </div>
+                  <div className='overflow-y-auto h-[80vh] my-2 py-1'>
                     {column?.items !== "undefined" &&
                       column?.items.map((item, index) => {
                         return (
@@ -266,6 +268,8 @@ const KanbanStatic = () => {
                         );
                       })}
                     {provided.placeholder}
+                  </div>
+                  <div className='mt-auto z-30'>
                     {columnId === "0" ? (
                       <div>
                         {add1 && (
@@ -331,11 +335,11 @@ const KanbanStatic = () => {
                       </div>
                     )}
                   </div>
-                )}
-              </Droppable>
-            );
-          })}
-        </div>
+                </div>
+              )}
+            </Droppable>
+          );
+        })}
       </div>
     </DragDropContext>
   );
