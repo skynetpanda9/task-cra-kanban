@@ -2,8 +2,8 @@ import React from "react";
 
 const MainLayout = (props) => {
   return (
-    <div className='flex flex-col relative my-2 justify-center items-center w-full px-4 box-border overflow-y-auto'>
-      <div className='flex flex-col w-full justify-start min-h-[90vh]'>
+    <div className='flex flex-col justify-center items-center w-[100vw] box-border my-auto'>
+      <div className='flex flex-col w-[97vw] xl:w-full overflow-x-auto min-h-[90vh]'>
         {props.children}
       </div>
     </div>

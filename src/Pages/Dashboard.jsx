@@ -7,12 +7,10 @@ import KanbanStatic from "../components/KanbanStatic";
 function Dashboard() {
   return (
     <div>
-      <div className='h-screen w-full fixed flex flex-col items-center justify-start bg-gray-200 dark:bg-gray-900'>
+      <div className='h-screen w-screen fixed flex flex-col items-center justify-start bg-gray-200 dark:bg-gray-900'>
         <Header />
         <MainLayout>
-          <div className='flex flex-row justify-center items-center w-full'>
-            <KanbanStatic />
-          </div>
+          <KanbanStatic />
         </MainLayout>
       </div>
     </div>
