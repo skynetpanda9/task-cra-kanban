@@ -23,8 +23,9 @@ const NewTask = ({ dataInit, setNewData, category, onClose }) => {
     <div>
       <Formik
         initialValues={form}
+        validateOnChange={false}
+        validateOnBlur={false}
         validate={(form) => {
-          console.log("hmm");
           let errors = {};
           if (!form.task) {
             errors.task = "Task shouldn't be empty!";
@@ -34,7 +35,7 @@ const NewTask = ({ dataInit, setNewData, category, onClose }) => {
           return errors;
         }}
         className='flex flex-col w-[100%] mt-4'
-        onSubmit={async (form, { setSubmitting }) => {
+        onSubmit={(form, { setSubmitting }) => {
           let newData = insertObject(dataInit, form);
           setNewData(newData);
           setSubmitting(false);

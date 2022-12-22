@@ -259,7 +259,7 @@ const KanbanStatic = () => {
                     {column?.title !== "undefined" && (
                       <div className='text-gray-100 bg-gray-600 dark:bg-gray-900 px-4 py-2 w-full rounded-md flex flex-row justify-between items-center'>
                         <div className='font-semibold'> {column?.title}</div>
-                        <div className='flex flex-row items-center justify-between w-[12%]'>
+                        <div className='flex flex-row items-center justify-between w-[18%] sm:w-[12%]'>
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             fill='none'
