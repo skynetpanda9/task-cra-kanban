@@ -263,7 +263,10 @@ const KanbanStatic = () => {
                       </div>
                     )}
                   </div>
-                  <div className='overflow-y-auto h-[80vh] my-2 py-1'>
+                  <div
+                    style={{}}
+                    className='overflow-y-auto h-[80vh] my-2 py-1 scrollbar-hide whitespace-nowrap'
+                  >
                     {column?.items !== "undefined" &&
                       column?.items.map((item, index) => {
                         return (
