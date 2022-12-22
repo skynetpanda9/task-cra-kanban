@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import NewTask from "./NewTask";
 import { v4 as uuid } from "uuid";
 import { useOnClickOutside } from "../utils/ClickOutside";
@@ -30,40 +30,40 @@ const KanbanStatic = () => {
   const dataInit = [
     {
       id: uuid(),
-      Task: "Task 1",
-      Category: "To Do",
-      Due_Date: date,
+      task: "Task 1",
+      category: "To Do",
+      dueDate: date,
     },
     {
       id: uuid(),
-      Task: "Task 2",
-      Category: "To Do",
-      Due_Date: date,
+      task: "Task 2",
+      category: "To Do",
+      dueDate: date,
     },
     {
       id: uuid(),
-      Task: "Task 3",
-      Category: "In Progress",
-      Due_Date: date,
+      task: "Task 3",
+      category: "In Progress",
+      dueDate: date,
     },
     {
       id: uuid(),
-      Task: "Task 4",
-      Category: "Done",
-      Due_Date: date,
+      task: "Task 4",
+      category: "Done",
+      dueDate: date,
     },
   ];
 
   const setData = () => {
     setLoading(true);
     const todo = dataInit.filter((el) => {
-      return el.Category === "To Do";
+      return el.category === "To Do";
     });
     const progress = dataInit.filter((el) => {
-      return el.Category === "In Progress";
+      return el.category === "In Progress";
     });
     const done = dataInit.filter((el) => {
-      return el.Category === "Done";
+      return el.category === "Done";
     });
 
     const backStaticData = [
@@ -251,7 +251,7 @@ const KanbanStatic = () => {
             <Droppable key={columnId} droppableId={columnId}>
               {(provided, snapshot) => (
                 <div
-                  className='h-[90vh] mr-4 lg:mr-10 flex flex-col justify-center bg-gray-400 dark:bg-gray-800 min-w-full sm:min-w-[470px] lg:min-w-[340px] xl:min-w-[370px] rounded-md p-4'
+                  className='h-[90vh] mr-4 lg:mr-10 flex flex-col justify-center bg-gray-400 dark:bg-gray-800 min-w-full sm:min-w-[400px] lg:min-w-[340px] xl:min-w-[370px] rounded-md p-4'
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
@@ -302,12 +302,12 @@ const KanbanStatic = () => {
                         <div
                           className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
                           onClick={() => {
-                            setAdd1(true);
+                            setAdd1(!add1);
                             setAdd2(false);
                             setAdd3(false);
                           }}
                         >
-                          <FontAwesomeIcon icon={faPlus} />
+                          <FontAwesomeIcon icon={add1 ? faXmark : faPlus} />
                         </div>
                       </div>
                     ) : columnId === "1" ? (
@@ -324,11 +324,11 @@ const KanbanStatic = () => {
                           className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800  dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
                           onClick={() => {
                             setAdd1(false);
-                            setAdd2(true);
+                            setAdd2(!add2);
                             setAdd3(false);
                           }}
                         >
-                          <FontAwesomeIcon icon={faPlus} />
+                          <FontAwesomeIcon icon={add2 ? faXmark : faPlus} />
                         </div>
                       </div>
                     ) : (
@@ -346,10 +346,10 @@ const KanbanStatic = () => {
                           onClick={() => {
                             setAdd1(false);
                             setAdd2(false);
-                            setAdd3(true);
+                            setAdd3(!add3);
                           }}
                         >
-                          <FontAwesomeIcon icon={faPlus} />
+                          <FontAwesomeIcon icon={add3 ? faXmark : faPlus} />
                         </div>
                       </div>
                     )}
