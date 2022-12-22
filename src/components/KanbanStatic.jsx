@@ -8,6 +8,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import NewTask from "./NewTask";
 import { v4 as uuid } from "uuid";
 import { useOnClickOutside } from "../utils/ClickOutside";
+import { Bars } from "react-loader-spinner";
 
 const KanbanStatic = () => {
   const ref = useRef();
@@ -54,6 +55,7 @@ const KanbanStatic = () => {
   ];
 
   const setData = () => {
+    setLoading(true);
     const todo = dataInit.filter((el) => {
       return el.Category === "To Do";
     });
@@ -82,6 +84,7 @@ const KanbanStatic = () => {
     setNewTodo(todo);
     setNewProgress(progress);
     setNewDone(done);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -89,6 +92,7 @@ const KanbanStatic = () => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     const backStaticData = [
       {
         title: "To Do",
@@ -104,10 +108,10 @@ const KanbanStatic = () => {
       },
     ];
     setColumns(backStaticData);
+    setLoading(false);
   }, [newTodo, newProgress, newDone]);
 
   const onDragEnd = (result, columns, setColumns) => {
-    setLoading(true);
     if (!result.destination) return;
     const { source, destination } = result;
     if (source.droppableId !== destination.droppableId) {
@@ -136,7 +140,6 @@ const KanbanStatic = () => {
         destItems[targetIndex].Category = cate;
         setNewTodo(sourceItems);
         setNewProgress(destItems);
-        setLoading(false);
       } else if (
         source.droppableId === "1" &&
         destination.droppableId === "2"
@@ -148,7 +151,6 @@ const KanbanStatic = () => {
         destItems[targetIndex].Category = cate;
         setNewDone(destItems);
         setNewProgress(sourceItems);
-        setLoading(false);
       } else if (
         source.droppableId === "2" &&
         destination.droppableId === "1"
@@ -160,7 +162,6 @@ const KanbanStatic = () => {
         destItems[targetIndex].Category = cate;
         setNewProgress(destItems);
         setNewDone(sourceItems);
-        setLoading(false);
       } else if (
         source.droppableId === "1" &&
         destination.droppableId === "0"
@@ -172,7 +173,6 @@ const KanbanStatic = () => {
         destItems[targetIndex].Category = cate;
         setNewTodo(destItems);
         setNewProgress(sourceItems);
-        setLoading(false);
       } else if (
         source.droppableId === "0" &&
         destination.droppableId === "2"
@@ -184,7 +184,6 @@ const KanbanStatic = () => {
         destItems[targetIndex].Category = cate;
         setNewDone(destItems);
         setNewTodo(sourceItems);
-        setLoading(false);
       } else if (
         source.droppableId === "2" &&
         destination.droppableId === "0"
@@ -196,7 +195,6 @@ const KanbanStatic = () => {
         destItems[targetIndex].Category = cate;
         setNewTodo(destItems);
         setNewDone(sourceItems);
-        setLoading(false);
       }
     } else {
       const column = columns[source.droppableId];
@@ -212,19 +210,16 @@ const KanbanStatic = () => {
       });
       if (source.droppableId === "0" && destination.droppableId === "0") {
         setNewTodo(copiedItems);
-        setLoading(false);
       } else if (
         source.droppableId === "1" &&
         destination.droppableId === "1"
       ) {
         setNewProgress(copiedItems);
-        setLoading(false);
       } else if (
         source.droppableId === "2" &&
         destination.droppableId === "2"
       ) {
         setNewDone(copiedItems);
-        setLoading(false);
       }
     }
   };
@@ -234,7 +229,15 @@ const KanbanStatic = () => {
   // console.log("newDone", newDone);
 
   return loading ? (
-    "ok"
+    <Bars
+      height='80'
+      width='80'
+      color='#fafafa'
+      ariaLabel='bars-loading'
+      wrapperStyle={{}}
+      wrapperClass=''
+      visible={true}
+    />
   ) : (
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
