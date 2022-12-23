@@ -9,6 +9,7 @@ import NewTask from "./NewTask";
 import { v4 as uuid } from "uuid";
 import { useOnClickOutside } from "../utils/ClickOutside";
 import { Bars } from "react-loader-spinner";
+import Modal from "../utils/Modal/Modal";
 
 const KanbanStatic = () => {
   const ref = useRef();
@@ -20,6 +21,8 @@ const KanbanStatic = () => {
   const [newProgress, setNewProgress] = useState([]);
   const [newDone, setNewDone] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [scrollDown, setScrollDown] = useState(false);
+  const [addNewColumn, setAddNewColumn] = useState(false);
 
   //utils
   useOnClickOutside(ref, () => setAdd1(false));
@@ -224,9 +227,18 @@ const KanbanStatic = () => {
     }
   };
 
-  // console.log("newTodo", newTodo);
-  // console.log("newProgress", newProgress);
-  // console.log("newDone", newDone);
+  const tasksEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    tasksEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+    setTimeout(() => {
+      setScrollDown(false);
+    }, 0);
+  }, [scrollDown]);
 
   return loading ? (
     <Bars
@@ -242,10 +254,7 @@ const KanbanStatic = () => {
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
-      <div
-        ref={ref}
-        className='flex flex-row items-center justify-start xl:justify-center'
-      >
+      <div ref={ref} className='flex flex-row items-center justify-start p-4'>
         {Object.entries(columns)?.map(([columnId, column], index) => {
           return (
             <Droppable key={columnId} droppableId={columnId}>
@@ -279,16 +288,18 @@ const KanbanStatic = () => {
                       </div>
                     )}
                   </div>
-                  <div className='overflow-y-auto h-[80vh] my-2 py-1 scrollbar-hide whitespace-nowrap'>
+                  <div className='overflow-y-scroll overflow-x-hidden h-[80vh] my-2 py-1 scrollbar-hide'>
                     {column?.items !== "undefined" &&
                       column?.items.map((item, index) => {
                         return (
-                          <TaskCard key={item.id} item={item} index={index} />
+                          <div key={index} ref={tasksEndRef}>
+                            <TaskCard key={item.id} item={item} index={index} />
+                          </div>
                         );
                       })}
                     {provided.placeholder}
                   </div>
-                  <div className='mt-auto z-30'>
+                  <div className='rounded-md p-1 min-h-[-50px]'>
                     {columnId === "0" ? (
                       <div>
                         {add1 && (
@@ -296,7 +307,10 @@ const KanbanStatic = () => {
                             dataInit={newTodo}
                             category={"To Do"}
                             setNewData={setNewTodo}
-                            onClose={() => setAdd1(false)}
+                            onClose={() => {
+                              setAdd1(false);
+                              setScrollDown(true);
+                            }}
                           />
                         )}
                         <div
@@ -317,7 +331,10 @@ const KanbanStatic = () => {
                             dataInit={newProgress}
                             category={"In Progress"}
                             setNewData={setNewProgress}
-                            onClose={() => setAdd2(false)}
+                            onClose={() => {
+                              setAdd2(false);
+                              setScrollDown(true);
+                            }}
                           />
                         )}
                         <div
@@ -338,7 +355,10 @@ const KanbanStatic = () => {
                             dataInit={newDone}
                             category={"Done"}
                             setNewData={setNewDone}
-                            onClose={() => setAdd3(false)}
+                            onClose={() => {
+                              setAdd3(false);
+                              setScrollDown(true);
+                            }}
                           />
                         )}
                         <div
@@ -359,7 +379,27 @@ const KanbanStatic = () => {
             </Droppable>
           );
         })}
+        <div
+          onClick={() => setAddNewColumn(true)}
+          className='bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-600 hover:text-gray-100 hover:shadow-md p-2 rounded-md'
+        >
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth={1.5}
+            stroke='currentColor'
+            className='w-6 h-6'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M12 4.5v15m7.5-7.5h-15'
+            />
+          </svg>
+        </div>
       </div>
+      {addNewColumn && <Modal onClickClose={() => setAddNewColumn(false)} />}
     </DragDropContext>
   );
 };

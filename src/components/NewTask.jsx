@@ -29,17 +29,24 @@ const NewTask = ({ dataInit, setNewData, category, onClose }) => {
           let errors = {};
           if (!form.task) {
             errors.task = "Task shouldn't be empty!";
-          } else if (!/^\S.*$/.test(form.task)) {
-            errors.task = "Invalid entry!";
           }
           return errors;
         }}
         className='flex flex-col w-[100%] mt-4'
         onSubmit={(form, { setSubmitting }) => {
-          let newData = insertObject(dataInit, form);
-          setNewData(newData);
-          setSubmitting(false);
-          onClose();
+          if (new RegExp(/^\s+|\s+$/g).test(form.task)) {
+            let newTask = form.task.replace(/^\s+|\s+$/g, "");
+            let newForm = { ...form, task: newTask };
+            let newData = insertObject(dataInit, newForm);
+            setNewData(newData);
+            setSubmitting(false);
+            onClose();
+          } else {
+            let newData = insertObject(dataInit, form);
+            setNewData(newData);
+            setSubmitting(false);
+            onClose();
+          }
         }}
       >
         {({ isSubmitting }) => (
