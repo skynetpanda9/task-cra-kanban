@@ -2,11 +2,25 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { v4 as uuid } from "uuid";
 
-const Modal = ({ onClickClose }) => {
+const Modal = ({
+  initColumnData,
+  onClickClose,
+  initRowData,
+  setNewFilteredData,
+}) => {
+  // console.log(initColumnData);
   const [columnName] = useState({
     title: "",
   });
+
+  const newColumnObj = (title, items) => {
+    return {
+      title: title,
+      items: items,
+    };
+  };
 
   return (
     <div className='flex flex-col justify-center items-center fixed z-50 left-1/2 top-1/4'>
@@ -34,15 +48,24 @@ const Modal = ({ onClickClose }) => {
               let errors = {};
               if (!columnName.title) {
                 errors.title = "Title shouldn't be empty!";
-              } else if (!/^\S.*$/.test(columnName.title)) {
-                errors.title = "Invalid entry!";
               }
               return errors;
             }}
             onSubmit={(columnName, { setSubmitting }) => {
-              setSubmitting(false);
-              console.log(columnName);
-              onClickClose();
+              if (new RegExp(/^\s+|\s+$/g).test(columnName.title)) {
+                let newTitle = columnName.title.replace(/^\s+|\s+$/g, "");
+                let newForm = { ...columnName, title: newTitle };
+                console.log(newForm);
+                setSubmitting(false);
+                onClickClose();
+              } else {
+                setSubmitting(false);
+                const data = newColumnObj(columnName.title, initRowData);
+                const newArr = { ...initColumnData, [uuid()]: data };
+
+                setNewFilteredData(newArr);
+                onClickClose();
+              }
             }}
           >
             {({ isSubmitting }) => (

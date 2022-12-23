@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, useRef } from "react";
@@ -14,105 +15,28 @@ import Modal from "../utils/Modal/Modal";
 const KanbanStatic = () => {
   const ref = useRef();
   const [loading, setLoading] = useState(false);
-  const [add1, setAdd1] = useState(false);
-  const [add2, setAdd2] = useState(false);
-  const [add3, setAdd3] = useState(false);
   const [newTodo, setNewTodo] = useState([]);
   const [newProgress, setNewProgress] = useState([]);
   const [newDone, setNewDone] = useState([]);
+  const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
   const [scrollDown, setScrollDown] = useState(false);
   const [addNewColumn, setAddNewColumn] = useState(false);
 
   //utils
-  useOnClickOutside(ref, () => setAdd1(false));
-  useOnClickOutside(ref, () => setAdd2(false));
-  useOnClickOutside(ref, () => setAdd3(false));
-
-  const date = new Date();
-  const dataInit = [
-    {
-      id: uuid(),
-      task: "Task 1",
-      category: "To Do",
-      dueDate: date,
-    },
-    {
-      id: uuid(),
-      task: "Task 2",
-      category: "To Do",
-      dueDate: date,
-    },
-    {
-      id: uuid(),
-      task: "Task 3",
-      category: "In Progress",
-      dueDate: date,
-    },
-    {
-      id: uuid(),
-      task: "Task 4",
-      category: "Done",
-      dueDate: date,
-    },
-  ];
-
-  const setData = () => {
-    setLoading(true);
-    const todo = dataInit.filter((el) => {
-      return el.category === "To Do";
-    });
-    const progress = dataInit.filter((el) => {
-      return el.category === "In Progress";
-    });
-    const done = dataInit.filter((el) => {
-      return el.category === "Done";
-    });
-
-    const backStaticData = [
-      {
-        title: "To Do",
-        items: todo,
-      },
-      {
-        title: "In Progress",
-        items: progress,
-      },
-      {
-        title: "Done",
-        items: done,
-      },
-    ];
-    setColumns(backStaticData);
-    setNewTodo(todo);
-    setNewProgress(progress);
-    setNewDone(done);
-    setLoading(false);
-  };
+  // useOnClickOutside(ref, () => setAdd1(false));
+  // useOnClickOutside(ref, () => setAdd2(false));
+  // useOnClickOutside(ref, () => setAdd3(false));
 
   useEffect(() => {
-    setData();
-  }, []);
+    console.log(rows);
+    setRows(rows);
+  }, [rows]);
 
   useEffect(() => {
-    setLoading(true);
-    const backStaticData = [
-      {
-        title: "To Do",
-        items: newTodo,
-      },
-      {
-        title: "In Progress",
-        items: newProgress,
-      },
-      {
-        title: "Done",
-        items: newDone,
-      },
-    ];
-    setColumns(backStaticData);
-    setLoading(false);
-  }, [newTodo, newProgress, newDone]);
+    console.log(columns);
+    setColumns(columns);
+  }, [columns]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -300,79 +224,21 @@ const KanbanStatic = () => {
                     {provided.placeholder}
                   </div>
                   <div className='rounded-md p-1 min-h-[-50px]'>
-                    {columnId === "0" ? (
-                      <div>
-                        {add1 && (
-                          <NewTask
-                            dataInit={newTodo}
-                            category={"To Do"}
-                            setNewData={setNewTodo}
-                            onClose={() => {
-                              setAdd1(false);
-                              setScrollDown(true);
-                            }}
-                          />
-                        )}
-                        <div
-                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
-                          onClick={() => {
-                            setAdd1(!add1);
-                            setAdd2(false);
-                            setAdd3(false);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={add1 ? faXmark : faPlus} />
-                        </div>
+                    <div>
+                      <NewTask
+                        dataInit={rows}
+                        setNewData={setRows}
+                        onClose={() => {
+                          setScrollDown(true);
+                        }}
+                      />
+                      <div
+                        className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
+                        onClick={() => {}}
+                      >
+                        <FontAwesomeIcon icon={faPlus} />
                       </div>
-                    ) : columnId === "1" ? (
-                      <div>
-                        {add2 && (
-                          <NewTask
-                            dataInit={newProgress}
-                            category={"In Progress"}
-                            setNewData={setNewProgress}
-                            onClose={() => {
-                              setAdd2(false);
-                              setScrollDown(true);
-                            }}
-                          />
-                        )}
-                        <div
-                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800  dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
-                          onClick={() => {
-                            setAdd1(false);
-                            setAdd2(!add2);
-                            setAdd3(false);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={add2 ? faXmark : faPlus} />
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        {add3 && (
-                          <NewTask
-                            dataInit={newDone}
-                            category={"Done"}
-                            setNewData={setNewDone}
-                            onClose={() => {
-                              setAdd3(false);
-                              setScrollDown(true);
-                            }}
-                          />
-                        )}
-                        <div
-                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800  dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
-                          onClick={() => {
-                            setAdd1(false);
-                            setAdd2(false);
-                            setAdd3(!add3);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={add3 ? faXmark : faPlus} />
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               )}
@@ -399,7 +265,14 @@ const KanbanStatic = () => {
           </svg>
         </div>
       </div>
-      {addNewColumn && <Modal onClickClose={() => setAddNewColumn(false)} />}
+      {addNewColumn && (
+        <Modal
+          initColumnData={columns}
+          initRowData={rows}
+          setNewFilteredData={setColumns}
+          onClickClose={() => setAddNewColumn(false)}
+        />
+      )}
     </DragDropContext>
   );
 };

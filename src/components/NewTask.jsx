@@ -4,13 +4,12 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuid } from "uuid";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-const NewTask = ({ dataInit, setNewData, category, onClose }) => {
+const NewTask = ({ dataInit, setNewData, onClose }) => {
   const date = new Date();
   // const [error, setError] = useState(false);
   const [form] = useState({
     id: uuid(),
     task: "",
-    category: category,
     dueDate: date,
   });
 
