@@ -6,16 +6,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 
 const NewTask = ({ dataRows, setNewRows, columnId, onClose, selectedId }) => {
   const date = new Date();
-  columnId === selectedId && console.log(columnId);
+  // columnId === selectedId && console.log(columnId);
   // console.log("selectedId", selectedId);
   const [form] = useState({
     id: uuid(),
-    columnBelong: columnId === selectedId && selectedId,
+    columnBelong: columnId === selectedId ? selectedId : "",
     task: "",
     dueDate: date,
   });
-
-  console.log(form);
 
   const insertObject = (arr, obj) => {
     let finArr = [...arr, obj];

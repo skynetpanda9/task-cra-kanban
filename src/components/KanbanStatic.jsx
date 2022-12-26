@@ -33,9 +33,12 @@ const KanbanStatic = () => {
   }, [title]);
 
   useEffect(() => {
-    console.log(rows);
+    console.log(columns);
     const data = Object.entries(columns)?.map(([columnId, column]) => {
-      // console.log(columnId);
+      // console.log(selectedId, "selectedId");
+      // console.log(columnId, "columnId");
+      // console.log(column, "column");
+      // const rowsD = rows.filter((x) => x.id === columnId);
       return {
         title: column.title,
         items: selectedId === columnId ? rows : [],
@@ -95,6 +98,7 @@ const KanbanStatic = () => {
   }, [scrollDown]);
 
   const test = (id) => {
+    // console.log(id);
     setAddTask(!addTask);
     setSelectedId(id);
   };
