@@ -15,28 +15,35 @@ import Modal from "../utils/Modal/Modal";
 const KanbanStatic = () => {
   const ref = useRef();
   const [loading, setLoading] = useState(false);
-  const [newTodo, setNewTodo] = useState([]);
-  const [newProgress, setNewProgress] = useState([]);
-  const [newDone, setNewDone] = useState([]);
+  const [addTask, setAddTask] = useState(false);
+  const [title, setTitle] = useState("");
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [selectedId, setSelectedId] = useState("");
   const [scrollDown, setScrollDown] = useState(false);
   const [addNewColumn, setAddNewColumn] = useState(false);
 
-  //utils
-  // useOnClickOutside(ref, () => setAdd1(false));
-  // useOnClickOutside(ref, () => setAdd2(false));
-  // useOnClickOutside(ref, () => setAdd3(false));
+  useEffect(() => {
+    const newColumnObj = {
+      title: title,
+      items: [],
+    };
+    const newArr = { ...columns, [uuid()]: newColumnObj };
+    title ? setColumns(newArr) : setColumns([]);
+  }, [title]);
 
   useEffect(() => {
     console.log(rows);
-    setRows(rows);
-  }, [rows]);
+    const data = Object.entries(columns)?.map(([columnId, column]) => {
+      // console.log(columnId);
+      return {
+        title: column.title,
+        items: selectedId === columnId ? rows : [],
+      };
+    });
 
-  useEffect(() => {
-    console.log(columns);
-    setColumns(columns);
-  }, [columns]);
+    setColumns(data);
+  }, [rows]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -59,70 +66,6 @@ const KanbanStatic = () => {
           items: destItems,
         },
       });
-      if (source.droppableId === "0" && destination.droppableId === "1") {
-        const cate = "In Progress";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewTodo(sourceItems);
-        setNewProgress(destItems);
-      } else if (
-        source.droppableId === "1" &&
-        destination.droppableId === "2"
-      ) {
-        const cate = "Done";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewDone(destItems);
-        setNewProgress(sourceItems);
-      } else if (
-        source.droppableId === "2" &&
-        destination.droppableId === "1"
-      ) {
-        const cate = "In Progress";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewProgress(destItems);
-        setNewDone(sourceItems);
-      } else if (
-        source.droppableId === "1" &&
-        destination.droppableId === "0"
-      ) {
-        const cate = "To Do";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewTodo(destItems);
-        setNewProgress(sourceItems);
-      } else if (
-        source.droppableId === "0" &&
-        destination.droppableId === "2"
-      ) {
-        const cate = "Done";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewDone(destItems);
-        setNewTodo(sourceItems);
-      } else if (
-        source.droppableId === "2" &&
-        destination.droppableId === "0"
-      ) {
-        const cate = "To Do";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewTodo(destItems);
-        setNewDone(sourceItems);
-      }
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -135,19 +78,6 @@ const KanbanStatic = () => {
           items: copiedItems,
         },
       });
-      if (source.droppableId === "0" && destination.droppableId === "0") {
-        setNewTodo(copiedItems);
-      } else if (
-        source.droppableId === "1" &&
-        destination.droppableId === "1"
-      ) {
-        setNewProgress(copiedItems);
-      } else if (
-        source.droppableId === "2" &&
-        destination.droppableId === "2"
-      ) {
-        setNewDone(copiedItems);
-      }
     }
   };
 
@@ -163,6 +93,11 @@ const KanbanStatic = () => {
       setScrollDown(false);
     }, 0);
   }, [scrollDown]);
+
+  const test = (id) => {
+    setAddTask(!addTask);
+    setSelectedId(id);
+  };
 
   return loading ? (
     <Bars
@@ -224,20 +159,25 @@ const KanbanStatic = () => {
                     {provided.placeholder}
                   </div>
                   <div className='rounded-md p-1 min-h-[-50px]'>
-                    <div>
-                      <NewTask
-                        dataInit={rows}
-                        setNewData={setRows}
-                        onClose={() => {
-                          setScrollDown(true);
-                        }}
-                      />
-                      <div
-                        className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
-                        onClick={() => {}}
-                      >
-                        <FontAwesomeIcon icon={faPlus} />
+                    {addTask && selectedId === columnId ? (
+                      <div>
+                        <NewTask
+                          dataRows={rows}
+                          setNewRows={setRows}
+                          columnId={columnId}
+                          selectedId={selectedId}
+                          onClose={() => {
+                            setAddTask(false);
+                            setScrollDown(true);
+                          }}
+                        />
                       </div>
+                    ) : null}
+                    <div
+                      className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
+                      onClick={() => test(columnId)}
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
                     </div>
                   </div>
                 </div>
@@ -267,9 +207,7 @@ const KanbanStatic = () => {
       </div>
       {addNewColumn && (
         <Modal
-          initColumnData={columns}
-          initRowData={rows}
-          setNewFilteredData={setColumns}
+          setNewTitle={setTitle}
           onClickClose={() => setAddNewColumn(false)}
         />
       )}

@@ -4,14 +4,18 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuid } from "uuid";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-const NewTask = ({ dataInit, setNewData, onClose }) => {
+const NewTask = ({ dataRows, setNewRows, columnId, onClose, selectedId }) => {
   const date = new Date();
-  // const [error, setError] = useState(false);
+  columnId === selectedId && console.log(columnId);
+  // console.log("selectedId", selectedId);
   const [form] = useState({
     id: uuid(),
+    columnBelong: columnId === selectedId && selectedId,
     task: "",
     dueDate: date,
   });
+
+  console.log(form);
 
   const insertObject = (arr, obj) => {
     let finArr = [...arr, obj];
@@ -36,13 +40,13 @@ const NewTask = ({ dataInit, setNewData, onClose }) => {
           if (new RegExp(/^\s+|\s+$/g).test(form.task)) {
             let newTask = form.task.replace(/^\s+|\s+$/g, "");
             let newForm = { ...form, task: newTask };
-            let newData = insertObject(dataInit, newForm);
-            setNewData(newData);
+            let newData = insertObject(dataRows, newForm);
+            setNewRows(newData);
             setSubmitting(false);
             onClose();
           } else {
-            let newData = insertObject(dataInit, form);
-            setNewData(newData);
+            let newData = insertObject(dataRows, form);
+            setNewRows(newData);
             setSubmitting(false);
             onClose();
           }

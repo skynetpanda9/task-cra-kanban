@@ -32,7 +32,6 @@ const Header = () => {
 
   const handleThemeSwitch = () => {
     setEnabled(!enabled);
-    console.log("ok");
     setTheme(theme === "dark" ? "light" : "dark");
   };
 

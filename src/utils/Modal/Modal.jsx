@@ -2,26 +2,11 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { v4 as uuid } from "uuid";
 
-const Modal = ({
-  initColumnData,
-  onClickClose,
-  initRowData,
-  setNewFilteredData,
-}) => {
-  // console.log(initColumnData);
-  const [columnName] = useState({
+const Modal = ({ setNewTitle, onClickClose }) => {
+  const [form] = useState({
     title: "",
   });
-
-  const newColumnObj = (title, items) => {
-    return {
-      title: title,
-      items: items,
-    };
-  };
-
   return (
     <div className='flex flex-col justify-center items-center fixed z-50 left-1/2 top-1/4'>
       <div
@@ -41,29 +26,25 @@ const Modal = ({
             </button>
           </div>
           <Formik
-            initialValues={columnName}
+            initialValues={form}
             validateOnChange={false}
             validateOnBlur={false}
-            validate={(columnName) => {
+            validate={(form) => {
               let errors = {};
-              if (!columnName.title) {
+              if (!form) {
                 errors.title = "Title shouldn't be empty!";
               }
               return errors;
             }}
-            onSubmit={(columnName, { setSubmitting }) => {
-              if (new RegExp(/^\s+|\s+$/g).test(columnName.title)) {
-                let newTitle = columnName.title.replace(/^\s+|\s+$/g, "");
-                let newForm = { ...columnName, title: newTitle };
-                console.log(newForm);
+            onSubmit={(form, { setSubmitting }) => {
+              if (new RegExp(/^\s+|\s+$/g).test(form.title)) {
+                let newTitle = form.title.replace(/^\s+|\s+$/g, "");
+                setNewTitle(newTitle.title);
                 setSubmitting(false);
                 onClickClose();
               } else {
+                setNewTitle(form.title);
                 setSubmitting(false);
-                const data = newColumnObj(columnName.title, initRowData);
-                const newArr = { ...initColumnData, [uuid()]: data };
-
-                setNewFilteredData(newArr);
                 onClickClose();
               }
             }}
