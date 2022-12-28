@@ -168,22 +168,18 @@ const KanbanStatic = () => {
                     {provided.placeholder}
                   </div>
                   <div className='rounded-md p-1 min-h-[-50px]'>
-                    {addTask ? (
-                      selectedId === columnId ? (
-                        <div>
-                          <NewTask
-                            title={column.title}
-                            setNewRows={setRows}
-                            columnId={columnId}
-                            onClose={() => {
-                              setAddTask(false);
-                              setScrollDown(true);
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <></>
-                      )
+                    {addTask && selectedId === columnId ? (
+                      <div>
+                        <NewTask
+                          title={column.title}
+                          setNewRows={setRows}
+                          columnId={columnId}
+                          onClose={() => {
+                            setAddTask(false);
+                            setScrollDown(true);
+                          }}
+                        />
+                      </div>
                     ) : null}
                     <div
                       className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
