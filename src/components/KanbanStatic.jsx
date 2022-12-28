@@ -38,7 +38,10 @@ const KanbanStatic = () => {
   useEffect(() => {
     const newCol = columns[rows.columnBelong];
     if (newCol?.items)
-      newCol.items = [...newCol.items, { task: rows.task, id: uuid() }];
+      newCol.items = [
+        ...newCol.items,
+        { task: rows.task, id: uuid(), dueDate: rows.dueDate },
+      ];
   }, [rows]);
 
   const onDragEnd = (result, columns, setColumns) => {
@@ -103,9 +106,6 @@ const KanbanStatic = () => {
       setAddTask(false);
       setAddNewColumn(false);
     }
-    // if (addTask || addNewColumn) {
-    //   event.preventDefault();
-    // }
   });
 
   return loading ? (
@@ -161,11 +161,7 @@ const KanbanStatic = () => {
                       column?.items.map((item, index) => {
                         return (
                           <div key={index} ref={tasksEndRef}>
-                            <TaskCard
-                              key={item.columnBelong}
-                              item={item}
-                              index={index}
-                            />
+                            <TaskCard key={item.id} item={item} index={index} />
                           </div>
                         );
                       })}
@@ -176,7 +172,6 @@ const KanbanStatic = () => {
                       selectedId === columnId ? (
                         <div>
                           <NewTask
-                            dataRows={rows}
                             title={column.title}
                             setNewRows={setRows}
                             columnId={columnId}

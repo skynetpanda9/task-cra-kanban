@@ -29,7 +29,6 @@ const TaskCard = ({ item, index }) => {
   };
 
   return (
-
     <>
       <Draggable draggableId={item.id} index={index}>
         {(provided, snapshot) => (
@@ -38,8 +37,20 @@ const TaskCard = ({ item, index }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <div className='text-black p-3 bg-slate-700 rounded'>
-              {item.task}
+            <div className='backdrop-blur-sm bg-white/30 dark:bg-gray-500/20 flex flex-col justify-center items-start py-0 px-4 h-[100px] rounded-md w-auto bg-gray-300 dark:bg-gray-700 mt-4 shadow-md'>
+              <p className='font-medium text-gray-800 dark:text-gray-200'>
+                {item.task}
+              </p>
+              <div className='flex justify-between items-center w-full text-xs font-light mt-2 text-gray-800 dark:text-gray-200'>
+                <p>
+                  <span>
+                    {new Date(item.dueDate).toLocaleDateString("en-us", {
+                      month: "short",
+                      day: "2-digit",
+                    })}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
         )}

@@ -3,17 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-const NewTask = ({ dataRows, setNewRows, columnId, onClose }) => {
+const NewTask = ({ setNewRows, columnId, onClose }) => {
   const date = new Date();
   const [form] = useState({
     columnBelong: columnId,
     task: "",
     dueDate: date,
   });
-
-  const insertObject = (arr, obj) => {
-    return obj;
-  };
 
   return (
     <div>
@@ -35,13 +31,12 @@ const NewTask = ({ dataRows, setNewRows, columnId, onClose }) => {
           if (new RegExp(/^\s+|\s+$/g).test(form.task)) {
             let newTask = form.task.replace(/^\s+|\s+$/g, "");
             let newForm = { ...form, task: newTask };
-            let newData = insertObject(dataRows, newForm);
+            let newData = newForm;
             setNewRows(newData);
             setSubmitting(false);
             onClose();
           } else {
-            let newData = insertObject(dataRows, form);
-            setNewRows(newData);
+            setNewRows(form);
             setSubmitting(false);
             onClose();
           }
