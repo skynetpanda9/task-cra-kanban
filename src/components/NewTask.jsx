@@ -1,23 +1,18 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { v4 as uuid } from "uuid";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
-const NewTask = ({ dataRows, setNewRows, columnId, onClose, selectedId }) => {
+const NewTask = ({ dataRows, setNewRows, columnId, onClose }) => {
   const date = new Date();
-  // columnId === selectedId && console.log(columnId);
-  // console.log("selectedId", selectedId);
   const [form] = useState({
-    id: uuid(),
-    columnBelong: columnId === selectedId ? selectedId : "",
+    columnBelong: columnId,
     task: "",
     dueDate: date,
   });
 
   const insertObject = (arr, obj) => {
-    let finArr = [...arr, obj];
-    return finArr;
+    return obj;
   };
 
   return (
@@ -30,6 +25,8 @@ const NewTask = ({ dataRows, setNewRows, columnId, onClose, selectedId }) => {
           let errors = {};
           if (!form.task) {
             errors.task = "Task shouldn't be empty!";
+          } else if (form.task.length > 16) {
+            errors.task = "Heading! Not a discription...";
           }
           return errors;
         }}

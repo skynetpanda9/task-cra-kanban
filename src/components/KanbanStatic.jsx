@@ -18,7 +18,7 @@ const KanbanStatic = () => {
   const [addTask, setAddTask] = useState(false);
   const [title, setTitle] = useState("");
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState({});
   const [selectedId, setSelectedId] = useState("");
   const [scrollDown, setScrollDown] = useState(false);
   const [addNewColumn, setAddNewColumn] = useState(false);
@@ -28,24 +28,17 @@ const KanbanStatic = () => {
       title: title,
       items: [],
     };
-    const newArr = { ...columns, [uuid()]: newColumnObj };
+    const newArr = {
+      ...columns,
+      [uuid()]: newColumnObj,
+    };
     title ? setColumns(newArr) : setColumns([]);
   }, [title]);
 
   useEffect(() => {
-    console.log(columns);
-    const data = Object.entries(columns)?.map(([columnId, column]) => {
-      // console.log(selectedId, "selectedId");
-      // console.log(columnId, "columnId");
-      // console.log(column, "column");
-      // const rowsD = rows.filter((x) => x.id === columnId);
-      return {
-        title: column.title,
-        items: selectedId === columnId ? rows : [],
-      };
-    });
-
-    setColumns(data);
+    const newCol = columns[rows.columnBelong];
+    if (newCol?.items)
+      newCol.items = [...newCol.items, { task: rows.task, id: uuid() }];
   }, [rows]);
 
   const onDragEnd = (result, columns, setColumns) => {
@@ -97,11 +90,23 @@ const KanbanStatic = () => {
     }, 0);
   }, [scrollDown]);
 
-  const test = (id) => {
-    // console.log(id);
+  const selId = (id) => {
     setAddTask(!addTask);
     setSelectedId(id);
   };
+
+  window.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented) {
+      return;
+    }
+    if (event.key === "Escape") {
+      setAddTask(false);
+      setAddNewColumn(false);
+    }
+    // if (addTask || addNewColumn) {
+    //   event.preventDefault();
+    // }
+  });
 
   return loading ? (
     <Bars
@@ -118,12 +123,12 @@ const KanbanStatic = () => {
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
       <div ref={ref} className='flex flex-row items-center justify-start p-4'>
-        {Object.entries(columns)?.map(([columnId, column], index) => {
+        {Object.entries(columns)?.map(([columnId, column]) => {
           return (
             <Droppable key={columnId} droppableId={columnId}>
               {(provided, snapshot) => (
                 <div
-                  className='h-[90vh] mr-4 lg:mr-10 flex flex-col justify-center bg-gray-400 dark:bg-gray-800 min-w-full sm:min-w-[400px] lg:min-w-[340px] xl:min-w-[370px] rounded-md p-4'
+                  className='h-[90vh] mr-4 lg:mr-10 flex flex-col justify-center bg-gray-400 dark:bg-gray-800 min-w-full sm:min-w-[370px] lg:min-w-[340px] xl:min-w-[370px] rounded-md p-4'
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
@@ -151,35 +156,43 @@ const KanbanStatic = () => {
                       </div>
                     )}
                   </div>
-                  <div className='overflow-y-scroll overflow-x-hidden h-[80vh] my-2 py-1 scrollbar-hide'>
+                  <div className='overflow-y-scroll overflow-x-hidden h-[80vh] my-2 py-1 scrollbar-hide text-red-700'>
                     {column?.items !== "undefined" &&
                       column?.items.map((item, index) => {
                         return (
                           <div key={index} ref={tasksEndRef}>
-                            <TaskCard key={item.id} item={item} index={index} />
+                            <TaskCard
+                              key={item.columnBelong}
+                              item={item}
+                              index={index}
+                            />
                           </div>
                         );
                       })}
                     {provided.placeholder}
                   </div>
                   <div className='rounded-md p-1 min-h-[-50px]'>
-                    {addTask && selectedId === columnId ? (
-                      <div>
-                        <NewTask
-                          dataRows={rows}
-                          setNewRows={setRows}
-                          columnId={columnId}
-                          selectedId={selectedId}
-                          onClose={() => {
-                            setAddTask(false);
-                            setScrollDown(true);
-                          }}
-                        />
-                      </div>
+                    {addTask ? (
+                      selectedId === columnId ? (
+                        <div>
+                          <NewTask
+                            dataRows={rows}
+                            title={column.title}
+                            setNewRows={setRows}
+                            columnId={columnId}
+                            onClose={() => {
+                              setAddTask(false);
+                              setScrollDown(true);
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <></>
+                      )
                     ) : null}
                     <div
                       className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
-                      onClick={() => test(columnId)}
+                      onClick={() => selId(columnId)}
                     >
                       <FontAwesomeIcon icon={faPlus} />
                     </div>
@@ -190,7 +203,9 @@ const KanbanStatic = () => {
           );
         })}
         <div
-          onClick={() => setAddNewColumn(true)}
+          onClick={() => {
+            setAddNewColumn(true);
+          }}
           className='bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-600 hover:text-gray-100 hover:shadow-md p-2 rounded-md'
         >
           <svg

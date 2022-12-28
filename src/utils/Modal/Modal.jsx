@@ -33,13 +33,15 @@ const Modal = ({ setNewTitle, onClickClose }) => {
               let errors = {};
               if (!form) {
                 errors.title = "Title shouldn't be empty!";
+              } else if (form.length > 16) {
+                errors.task = "Heading! Not a discription...";
               }
               return errors;
             }}
             onSubmit={(form, { setSubmitting }) => {
               if (new RegExp(/^\s+|\s+$/g).test(form.title)) {
                 let newTitle = form.title.replace(/^\s+|\s+$/g, "");
-                setNewTitle(newTitle.title);
+                setNewTitle(newTitle);
                 setSubmitting(false);
                 onClickClose();
               } else {
