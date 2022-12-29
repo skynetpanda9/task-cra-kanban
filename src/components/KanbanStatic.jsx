@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import NewTask from "./NewTask";
 import { v4 as uuid } from "uuid";
-import { useOnClickOutside } from "../utils/ClickOutside";
 import { Bars } from "react-loader-spinner";
 import Modal from "../utils/Modal/Modal";
 
@@ -51,8 +50,6 @@ const KanbanStatic = () => {
     }
   }, [rows]);
 
-  console.log("rows", rows);
-
   useEffect(() => {
     const newCol = columns[icon.columnId];
     const dataCol = newCol?.items.map((data) => {
@@ -63,12 +60,6 @@ const KanbanStatic = () => {
     });
     if (newCol?.items) newCol.items = dataCol;
   }, [icon]);
-
-  console.log("icon", icon);
-
-  useEffect(() => {
-    console.log("columns", columns);
-  }, [columns]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -190,6 +181,7 @@ const KanbanStatic = () => {
                             <TaskCard
                               key={item.id}
                               item={item}
+                              // icon={icon.icon}
                               index={index}
                               setNewIcon={setNewIcon}
                               columnId={columnId}

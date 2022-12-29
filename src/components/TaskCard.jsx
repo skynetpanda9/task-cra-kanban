@@ -5,6 +5,7 @@ import AssigneeModal from "./AssigneeModal";
 
 const TaskCard = ({ item, index, setNewIcon, columnId }) => {
   const [assignee, setAssignee] = useState(false);
+
   const UserIcon = () => {
     return (
       <div>
