@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { v4 as uuid } from "uuid";
 
 const NewTask = ({ setNewRows, columnId, onClose }) => {
   const date = new Date();
   const [form] = useState({
+    id: uuid(),
     columnBelong: columnId,
     task: "",
     dueDate: date,
+    icon: "",
   });
 
   return (

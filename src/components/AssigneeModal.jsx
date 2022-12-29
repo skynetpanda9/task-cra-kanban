@@ -1,7 +1,7 @@
 import React from "react";
 import users from "../data/userData";
 
-const AssigneeModal = ({ iconSet, assignToggle }) => {
+const AssigneeModal = ({ id, assignToggle, setIcon }) => {
   return (
     <div className='flex flex-col justify-center items-center fixed z-50 left-1/2 top-1/4  cursor-default'>
       <div
@@ -35,7 +35,7 @@ const AssigneeModal = ({ iconSet, assignToggle }) => {
               <ul key={user.id} className='w-full'>
                 <li
                   onClick={() => {
-                    iconSet(user.icon);
+                    setIcon(user.icon);
                     assignToggle(false);
                   }}
                   className='flex flex-row p-2 items-center w-full justify-between cursor-pointer rounded-md hover:bg-gray-400 dark:hover:bg-gray-800 hover:shadow-md'

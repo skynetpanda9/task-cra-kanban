@@ -22,6 +22,7 @@ const KanbanStatic = () => {
   const [selectedId, setSelectedId] = useState("");
   const [scrollDown, setScrollDown] = useState(false);
   const [addNewColumn, setAddNewColumn] = useState(false);
+  const [icon, setIcon] = useState("");
 
   useEffect(() => {
     const newColumnObj = {
@@ -40,9 +41,21 @@ const KanbanStatic = () => {
     if (newCol?.items)
       newCol.items = [
         ...newCol.items,
-        { task: rows.task, id: uuid(), dueDate: rows.dueDate },
+        {
+          task: rows.task,
+          id: rows.id,
+          dueDate: rows.dueDate,
+          icon: rows.icon,
+        },
       ];
   }, [rows]);
+
+  useEffect(() => {
+    setRows((previousState) => ({
+      ...previousState,
+      icon: icon,
+    }));
+  }, [icon]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -161,7 +174,13 @@ const KanbanStatic = () => {
                       column?.items.map((item, index) => {
                         return (
                           <div key={index} ref={tasksEndRef}>
-                            <TaskCard key={item.id} item={item} index={index} />
+                            <TaskCard
+                              key={item.id}
+                              item={item}
+                              index={index}
+                              icone={item.icon}
+                              setIcon={setIcon}
+                            />
                           </div>
                         );
                       })}

@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import AssigneeModal from "./AssigneeModal";
 
-const TaskCard = ({ item, index }) => {
+const TaskCard = ({ item, index, icone, setIcon }) => {
   const [assignee, setAssignee] = useState(false);
-  const [icon, setIcon] = useState("");
 
   const UserIcon = () => {
     return (
@@ -58,12 +57,16 @@ const TaskCard = ({ item, index }) => {
                   className='flex w-2/12 justify-center cursor-pointer'
                   onClick={() => setAssignee(!assignee)}
                 >
-                  {icon ? icon : <UserIcon />}
+                  {icone ? icone : <UserIcon />}
                 </div>
               </div>
             </div>
             {assignee && (
-              <AssigneeModal iconSet={setIcon} assignToggle={setAssignee} />
+              <AssigneeModal
+                id={item.id}
+                assignToggle={setAssignee}
+                setIcon={setIcon}
+              />
             )}
           </div>
         )}
