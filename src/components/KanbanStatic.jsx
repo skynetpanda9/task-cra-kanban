@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import NewTask from "./NewTask";
 import { v4 as uuid } from "uuid";
-import { Bars } from "react-loader-spinner";
+import { FallingLines } from "react-loader-spinner";
 import Modal from "../utils/Modal/Modal";
 
 const KanbanStatic = () => {
@@ -18,7 +18,7 @@ const KanbanStatic = () => {
   const [title, setTitle] = useState("");
   const [rows, setRows] = useState([]);
   const [icon, setNewIcon] = useState({});
-  const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState({});
   const [selectedId, setSelectedId] = useState("");
   const [scrollDown, setScrollDown] = useState(false);
   const [addNewColumn, setAddNewColumn] = useState(false);
@@ -51,6 +51,7 @@ const KanbanStatic = () => {
   }, [rows]);
 
   useEffect(() => {
+    setLoading(true);
     const newCol = columns[icon.columnId];
     const dataCol = newCol?.items.map((data) => {
       if (data.id === icon.id) {
@@ -59,6 +60,9 @@ const KanbanStatic = () => {
       return data;
     });
     if (newCol?.items) newCol.items = dataCol;
+    setTimeout(() => {
+      setLoading(false);
+    }, 0);
   }, [icon]);
 
   const onDragEnd = (result, columns, setColumns) => {
@@ -126,14 +130,11 @@ const KanbanStatic = () => {
   });
 
   return loading ? (
-    <Bars
-      height='80'
-      width='80'
-      color='#fafafa'
-      ariaLabel='bars-loading'
-      wrapperStyle={{}}
-      wrapperClass=''
+    <FallingLines
+      color='#4fa94d'
+      width='100'
       visible={true}
+      ariaLabel='falling-lines-loading'
     />
   ) : (
     <DragDropContext
@@ -153,7 +154,7 @@ const KanbanStatic = () => {
                     {column?.title !== "undefined" && (
                       <div className='text-gray-100 bg-gray-600 dark:bg-gray-900 px-4 py-2 w-full rounded-md flex flex-row justify-between items-center'>
                         <div className='font-semibold'> {column?.title}</div>
-                        <div className='flex flex-row items-center justify-between w-[18%] sm:w-[12%]'>
+                        <div className='flex flex-row items-center justify-between w-[20%] sm:w-[14%]'>
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             fill='none'
@@ -181,7 +182,6 @@ const KanbanStatic = () => {
                             <TaskCard
                               key={item.id}
                               item={item}
-                              // icon={icon.icon}
                               index={index}
                               setNewIcon={setNewIcon}
                               columnId={columnId}
