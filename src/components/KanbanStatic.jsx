@@ -18,11 +18,11 @@ const KanbanStatic = () => {
   const [addTask, setAddTask] = useState(false);
   const [title, setTitle] = useState("");
   const [rows, setRows] = useState([]);
-  const [columns, setColumns] = useState({});
+  const [icon, setNewIcon] = useState({});
+  const [columns, setColumns] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [scrollDown, setScrollDown] = useState(false);
   const [addNewColumn, setAddNewColumn] = useState(false);
-  const [icon, setIcon] = useState("");
 
   useEffect(() => {
     const newColumnObj = {
@@ -38,7 +38,7 @@ const KanbanStatic = () => {
 
   useEffect(() => {
     const newCol = columns[rows.columnBelong];
-    if (newCol?.items)
+    if (newCol?.items) {
       newCol.items = [
         ...newCol.items,
         {
@@ -48,14 +48,27 @@ const KanbanStatic = () => {
           icon: rows.icon,
         },
       ];
+    }
   }, [rows]);
 
+  console.log("rows", rows);
+
   useEffect(() => {
-    setRows((previousState) => ({
-      ...previousState,
-      icon: icon,
-    }));
+    const newCol = columns[icon.columnId];
+    const dataCol = newCol?.items.map((data) => {
+      if (data.id === icon.id) {
+        return { ...data, icon: icon.icon };
+      }
+      return data;
+    });
+    if (newCol?.items) newCol.items = dataCol;
   }, [icon]);
+
+  console.log("icon", icon);
+
+  useEffect(() => {
+    console.log("columns", columns);
+  }, [columns]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -178,8 +191,8 @@ const KanbanStatic = () => {
                               key={item.id}
                               item={item}
                               index={index}
-                              icone={item.icon}
-                              setIcon={setIcon}
+                              setNewIcon={setNewIcon}
+                              columnId={columnId}
                             />
                           </div>
                         );
