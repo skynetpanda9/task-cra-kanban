@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import users from "../data/userData";
+import { CloseIcon } from "../icons";
 
 const AssigneeModal = ({ item, assignToggle, setNewIcon, columnId }) => {
   window.addEventListener("keydown", (event) => {
@@ -22,21 +23,7 @@ const AssigneeModal = ({ item, assignToggle, setNewIcon, columnId }) => {
           <p className='font-semibold text-lg text-gray-800 dark:text-gray-300'>
             Assign to
           </p>
-          <svg
-            onClick={() => assignToggle(false)}
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth='1.5'
-            stroke='currentColor'
-            className='w-5 h-5 text-gray-800 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-600 cursor-pointer'
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M6 18L18 6M6 6l12 12'
-            />
-          </svg>
+          <CloseIcon toggle={() => assignToggle(false)} />
         </div>
         <div className='flex flex-col py-2 px-1 items-center justify-center text-gray-800 dark:text-gray-300'>
           {users.map((user) => {

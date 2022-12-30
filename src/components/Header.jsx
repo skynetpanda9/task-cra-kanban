@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Sidenav from "./Sidenav";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRocket } from "@fortawesome/free-solid-svg-icons";
 import { Switch } from "@headlessui/react";
 import { useOnClickOutside } from "../utils/ClickOutside";
+import { LaunchIcon } from "../icons";
 
 const Header = () => {
   const ref = useRef();
@@ -38,14 +37,15 @@ const Header = () => {
   return (
     <div ref={ref}>
       <div className='flex z-50 flex-row items-center relative drop-shadow-md justify-between w-screen h-10 bg-gray-600 dark:bg-gray-800'>
-        <FontAwesomeIcon
-          className='text-gray-100 ml-4 cursor-pointer'
-          icon={faRocket}
-          size='lg'
+        <div
           onClick={() => {
             setNav(!nav);
           }}
-        />
+          className='text-gray-100 ml-4 cursor-pointer'
+        >
+          <LaunchIcon />
+        </div>
+
         <div className='flex flex-row items-center justify-end'>
           <div className='flex mr-4'>
             <Switch.Group>

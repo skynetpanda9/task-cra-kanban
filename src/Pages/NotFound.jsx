@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { LeftArrow } from "../icons";
 
 const NotFound = () => {
   return (
@@ -13,10 +12,9 @@ const NotFound = () => {
             className='group text-gray-900 hover:text-gray-300 w-auto rounded-md p-2 no-underline font-medium bg-gray-300 hover:bg-gray-900'
           >
             <div className='flex flex-row justify-between items-center'>
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                className='group-hover:text-gray-300 mx-3'
-              />
+              <div className='group-hover:text-gray-300 mx-3'>
+                <LeftArrow />
+              </div>
               <p className='mr-6 group-hover:text-gray-300'>Home</p>
             </div>
           </Link>

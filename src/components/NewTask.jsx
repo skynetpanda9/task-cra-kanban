@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { v4 as uuid } from "uuid";
 import * as Yup from "yup";
+import { CheckIcon } from "../icons";
 
 const formSchema = Yup.object({
   task: Yup.string()
@@ -61,11 +60,11 @@ const NewTask = ({ setNewRows, columnId, onClose }) => {
               />
 
               <button
-                className='block w-[20%] ml-2 rounded-md border-none text-gray-300 bg-gray-900 shadow-md hover:bg-green-700'
+                className='flex items-center justify-center w-[20%] ml-2 rounded-md border-none text-gray-300 bg-gray-900 shadow-md hover:bg-green-700'
                 type='submit'
                 disabled={isSubmitting}
               >
-                <FontAwesomeIcon icon={faCheck} />
+                <CheckIcon />
               </button>
             </div>
             <ErrorMessage

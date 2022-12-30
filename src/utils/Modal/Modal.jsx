@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { CloseIcon } from "../../icons";
 
 const titleSchema = Yup.object({
   title: Yup.string()
@@ -25,13 +24,7 @@ const Modal = ({ setNewTitle, onClickClose }) => {
         <div className='flex flex-col py-2 px-1 items-center justify-center text-gray-800 dark:text-gray-300'>
           <div className='flex flex-row items-center justify-between w-full mb-2'>
             <p className='font-semibold text-lg'>Create New Column</p>
-            <button onClick={onClickClose}>
-              <FontAwesomeIcon
-                icon={faXmark}
-                size='lg'
-                className='text-gray-800 hover:text-red-600 dark:hover:text-red-600'
-              />
-            </button>
+            <CloseIcon toggle={onClickClose} />
           </div>
           <Formik
             initialValues={form}
