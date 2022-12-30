@@ -3,6 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { v4 as uuid } from "uuid";
+import * as Yup from "yup";
+
+const formSchema = Yup.object({
+  task: Yup.string()
+    .min(2, "Too Short!")
+    .max(16, "Too Long!")
+    .required("Task is required!"),
+});
 
 const NewTask = ({ setNewRows, columnId, onClose }) => {
   const date = new Date();
@@ -18,26 +26,21 @@ const NewTask = ({ setNewRows, columnId, onClose }) => {
     <div>
       <Formik
         initialValues={form}
+        validationSchema={formSchema}
         validateOnChange={false}
         validateOnBlur={false}
-        validate={(form) => {
-          let errors = {};
-          if (!form.task) {
-            errors.task = "Task shouldn't be empty!";
-          } else if (form.task.length > 16) {
-            errors.task = "Heading! Not a discription...";
-          }
-          return errors;
-        }}
         className='flex flex-col w-[100%] mt-4'
-        onSubmit={(form, { setSubmitting }) => {
+        onSubmit={(form, { resetForm, setSubmitting }) => {
           if (new RegExp(/^\s+|\s+$/g).test(form.task)) {
             let newTask = form.task.replace(/^\s+|\s+$/g, "");
-            let newForm = { ...form, task: newTask };
-            let newData = newForm;
-            setNewRows(newData);
-            setSubmitting(false);
-            onClose();
+            if (newTask === "") {
+              resetForm({ values: "" });
+            } else {
+              let newForm = { ...form, task: newTask };
+              setNewRows(newForm);
+              setSubmitting(false);
+              onClose();
+            }
           } else {
             setNewRows(form);
             setSubmitting(false);

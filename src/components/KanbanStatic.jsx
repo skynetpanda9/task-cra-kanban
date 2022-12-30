@@ -13,6 +13,7 @@ import Modal from "../utils/Modal/Modal";
 
 const KanbanStatic = () => {
   const ref = useRef();
+  const tasksEndRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [addTask, setAddTask] = useState(false);
   const [title, setTitle] = useState("");
@@ -101,8 +102,6 @@ const KanbanStatic = () => {
     }
   };
 
-  const tasksEndRef = useRef(null);
-
   const scrollToBottom = () => {
     tasksEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -111,12 +110,12 @@ const KanbanStatic = () => {
     scrollToBottom();
     setTimeout(() => {
       setScrollDown(false);
-    }, 0);
+    }, 50);
   }, [scrollDown]);
 
   const selId = (id) => {
-    setAddTask(!addTask);
     setSelectedId(id);
+    setAddTask(!addTask);
   };
 
   window.addEventListener("keydown", (event) => {
@@ -199,8 +198,8 @@ const KanbanStatic = () => {
                           setNewRows={setRows}
                           columnId={columnId}
                           onClose={() => {
-                            setAddTask(false);
                             setScrollDown(true);
+                            setAddTask(false);
                           }}
                         />
                       </div>

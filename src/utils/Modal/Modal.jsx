@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+const titleSchema = Yup.object({
+  title: Yup.string()
+    .min(2, "Too Short!")
+    .max(16, "Too Long!")
+    .required("Title is required!"),
+});
 
 const Modal = ({ setNewTitle, onClickClose }) => {
   const [form] = useState({
@@ -27,23 +35,19 @@ const Modal = ({ setNewTitle, onClickClose }) => {
           </div>
           <Formik
             initialValues={form}
+            validationSchema={titleSchema}
             validateOnChange={false}
             validateOnBlur={false}
-            validate={(form) => {
-              let errors = {};
-              if (!form) {
-                errors.title = "Title shouldn't be empty!";
-              } else if (form.length > 16) {
-                errors.task = "Heading! Not a discription...";
-              }
-              return errors;
-            }}
-            onSubmit={(form, { setSubmitting }) => {
+            onSubmit={(form, { resetForm, setSubmitting }) => {
               if (new RegExp(/^\s+|\s+$/g).test(form.title)) {
                 let newTitle = form.title.replace(/^\s+|\s+$/g, "");
-                setNewTitle(newTitle);
-                setSubmitting(false);
-                onClickClose();
+                if (newTitle === "") {
+                  resetForm({ values: "" });
+                } else {
+                  setNewTitle(newTitle);
+                  setSubmitting(false);
+                  onClickClose();
+                }
               } else {
                 setNewTitle(form.title);
                 setSubmitting(false);
