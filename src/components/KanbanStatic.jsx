@@ -5,16 +5,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import NewTask from "./NewTask";
 import { v4 as uuid } from "uuid";
-import { FallingLines } from "react-loader-spinner";
 import Modal from "../utils/Modal/Modal";
 
 const KanbanStatic = () => {
   const ref = useRef();
   const tasksEndRef = useRef(null);
-  const [loading, setLoading] = useState(false);
   const [addTask, setAddTask] = useState(false);
   const [title, setTitle] = useState("");
   const [rows, setRows] = useState([]);
@@ -23,6 +21,7 @@ const KanbanStatic = () => {
   const [selectedId, setSelectedId] = useState("");
   const [scrollDown, setScrollDown] = useState(false);
   const [addNewColumn, setAddNewColumn] = useState(false);
+  const [showDot, setShowDot] = useState(false);
 
   useEffect(() => {
     const newColumnObj = {
@@ -52,7 +51,7 @@ const KanbanStatic = () => {
   }, [rows]);
 
   useEffect(() => {
-    setLoading(true);
+    setShowDot(true);
     const newCol = columns[icon.columnId];
     const dataCol = newCol?.items.map((data) => {
       if (data.id === icon.id) {
@@ -62,7 +61,7 @@ const KanbanStatic = () => {
     });
     if (newCol?.items) newCol.items = dataCol;
     setTimeout(() => {
-      setLoading(false);
+      setShowDot(false);
     }, 0);
   }, [icon]);
 
@@ -128,14 +127,7 @@ const KanbanStatic = () => {
     }
   });
 
-  return loading ? (
-    <FallingLines
-      color='#4fa94d'
-      width='100'
-      visible={true}
-      ariaLabel='falling-lines-loading'
-    />
-  ) : (
+  return (
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
@@ -173,6 +165,7 @@ const KanbanStatic = () => {
                       </div>
                     )}
                   </div>
+
                   <div className='overflow-y-scroll overflow-x-hidden h-[80vh] my-2 py-1 scrollbar-hide text-red-700'>
                     {column?.items !== "undefined" &&
                       column?.items.map((item, index) => {
@@ -216,6 +209,9 @@ const KanbanStatic = () => {
             </Droppable>
           );
         })}
+        {showDot && (
+          <div className='bg-red-500 flex items-center justify-center h-4 rounded-full w-4 p-1'></div>
+        )}
         <div
           onClick={() => {
             setAddNewColumn(true);
@@ -238,6 +234,7 @@ const KanbanStatic = () => {
           </svg>
         </div>
       </div>
+
       {addNewColumn && (
         <Modal
           setNewTitle={setTitle}
