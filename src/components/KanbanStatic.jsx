@@ -1,118 +1,69 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, useRef } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import TaskCard from "./TaskCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import NewTask from "./NewTask";
 import { v4 as uuid } from "uuid";
-import { useOnClickOutside } from "../utils/ClickOutside";
-import { Bars } from "react-loader-spinner";
 import Modal from "../utils/Modal/Modal";
 
 const KanbanStatic = () => {
   const ref = useRef();
-  const [loading, setLoading] = useState(false);
-  const [add1, setAdd1] = useState(false);
-  const [add2, setAdd2] = useState(false);
-  const [add3, setAdd3] = useState(false);
-  const [newTodo, setNewTodo] = useState([]);
-  const [newProgress, setNewProgress] = useState([]);
-  const [newDone, setNewDone] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const tasksEndRef = useRef(null);
+  const [addTask, setAddTask] = useState(false);
+  const [title, setTitle] = useState("");
+  const [rows, setRows] = useState([]);
+  const [icon, setNewIcon] = useState({});
+  const [columns, setColumns] = useState({});
+  const [selectedId, setSelectedId] = useState("");
   const [scrollDown, setScrollDown] = useState(false);
   const [addNewColumn, setAddNewColumn] = useState(false);
-
-  //utils
-  useOnClickOutside(ref, () => setAdd1(false));
-  useOnClickOutside(ref, () => setAdd2(false));
-  useOnClickOutside(ref, () => setAdd3(false));
-
-  const date = new Date();
-  const dataInit = [
-    {
-      id: uuid(),
-      task: "Task 1",
-      category: "To Do",
-      dueDate: date,
-    },
-    {
-      id: uuid(),
-      task: "Task 2",
-      category: "To Do",
-      dueDate: date,
-    },
-    {
-      id: uuid(),
-      task: "Task 3",
-      category: "In Progress",
-      dueDate: date,
-    },
-    {
-      id: uuid(),
-      task: "Task 4",
-      category: "Done",
-      dueDate: date,
-    },
-  ];
-
-  const setData = () => {
-    setLoading(true);
-    const todo = dataInit.filter((el) => {
-      return el.category === "To Do";
-    });
-    const progress = dataInit.filter((el) => {
-      return el.category === "In Progress";
-    });
-    const done = dataInit.filter((el) => {
-      return el.category === "Done";
-    });
-
-    const backStaticData = [
-      {
-        title: "To Do",
-        items: todo,
-      },
-      {
-        title: "In Progress",
-        items: progress,
-      },
-      {
-        title: "Done",
-        items: done,
-      },
-    ];
-    setColumns(backStaticData);
-    setNewTodo(todo);
-    setNewProgress(progress);
-    setNewDone(done);
-    setLoading(false);
-  };
+  const [showDot, setShowDot] = useState(false);
 
   useEffect(() => {
-    setData();
-  }, []);
+    const newColumnObj = {
+      title: title,
+      items: [],
+    };
+    const newArr = {
+      ...columns,
+      [uuid()]: newColumnObj,
+    };
+    title ? setColumns(newArr) : setColumns([]);
+  }, [title]);
 
   useEffect(() => {
-    setLoading(true);
-    const backStaticData = [
-      {
-        title: "To Do",
-        items: newTodo,
-      },
-      {
-        title: "In Progress",
-        items: newProgress,
-      },
-      {
-        title: "Done",
-        items: newDone,
-      },
-    ];
-    setColumns(backStaticData);
-    setLoading(false);
-  }, [newTodo, newProgress, newDone]);
+    const newCol = columns[rows.columnBelong];
+    if (newCol?.items) {
+      newCol.items = [
+        ...newCol.items,
+        {
+          task: rows.task,
+          id: rows.id,
+          dueDate: rows.dueDate,
+          icon: rows.icon,
+        },
+      ];
+    }
+  }, [rows]);
+
+  useEffect(() => {
+    setShowDot(true);
+    const newCol = columns[icon.columnId];
+    const dataCol = newCol?.items.map((data) => {
+      if (data.id === icon.id) {
+        return { ...data, icon: icon.icon };
+      }
+      return data;
+    });
+    if (newCol?.items) newCol.items = dataCol;
+    setTimeout(() => {
+      setShowDot(false);
+    }, 0);
+  }, [icon]);
 
   const onDragEnd = (result, columns, setColumns) => {
     if (!result.destination) return;
@@ -135,70 +86,6 @@ const KanbanStatic = () => {
           items: destItems,
         },
       });
-      if (source.droppableId === "0" && destination.droppableId === "1") {
-        const cate = "In Progress";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewTodo(sourceItems);
-        setNewProgress(destItems);
-      } else if (
-        source.droppableId === "1" &&
-        destination.droppableId === "2"
-      ) {
-        const cate = "Done";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewDone(destItems);
-        setNewProgress(sourceItems);
-      } else if (
-        source.droppableId === "2" &&
-        destination.droppableId === "1"
-      ) {
-        const cate = "In Progress";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewProgress(destItems);
-        setNewDone(sourceItems);
-      } else if (
-        source.droppableId === "1" &&
-        destination.droppableId === "0"
-      ) {
-        const cate = "To Do";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewTodo(destItems);
-        setNewProgress(sourceItems);
-      } else if (
-        source.droppableId === "0" &&
-        destination.droppableId === "2"
-      ) {
-        const cate = "Done";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewDone(destItems);
-        setNewTodo(sourceItems);
-      } else if (
-        source.droppableId === "2" &&
-        destination.droppableId === "0"
-      ) {
-        const cate = "To Do";
-        const targetIndex = destItems.findIndex(
-          (f) => f.id === result.draggableId
-        );
-        destItems[targetIndex].Category = cate;
-        setNewTodo(destItems);
-        setNewDone(sourceItems);
-      }
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
@@ -211,23 +98,8 @@ const KanbanStatic = () => {
           items: copiedItems,
         },
       });
-      if (source.droppableId === "0" && destination.droppableId === "0") {
-        setNewTodo(copiedItems);
-      } else if (
-        source.droppableId === "1" &&
-        destination.droppableId === "1"
-      ) {
-        setNewProgress(copiedItems);
-      } else if (
-        source.droppableId === "2" &&
-        destination.droppableId === "2"
-      ) {
-        setNewDone(copiedItems);
-      }
     }
   };
-
-  const tasksEndRef = useRef(null);
 
   const scrollToBottom = () => {
     tasksEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -237,30 +109,35 @@ const KanbanStatic = () => {
     scrollToBottom();
     setTimeout(() => {
       setScrollDown(false);
-    }, 0);
+    }, 50);
   }, [scrollDown]);
 
-  return loading ? (
-    <Bars
-      height='80'
-      width='80'
-      color='#fafafa'
-      ariaLabel='bars-loading'
-      wrapperStyle={{}}
-      wrapperClass=''
-      visible={true}
-    />
-  ) : (
+  const selId = (id) => {
+    setSelectedId(id);
+    setAddTask(!addTask);
+  };
+
+  window.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented) {
+      return;
+    }
+    if (event.key === "Escape") {
+      setAddTask(false);
+      setAddNewColumn(false);
+    }
+  });
+
+  return (
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
     >
       <div ref={ref} className='flex flex-row items-center justify-start p-4'>
-        {Object.entries(columns)?.map(([columnId, column], index) => {
+        {Object.entries(columns)?.map(([columnId, column]) => {
           return (
             <Droppable key={columnId} droppableId={columnId}>
               {(provided, snapshot) => (
                 <div
-                  className='h-[90vh] mr-4 lg:mr-10 flex flex-col justify-center bg-gray-400 dark:bg-gray-800 min-w-full sm:min-w-[400px] lg:min-w-[340px] xl:min-w-[370px] rounded-md p-4'
+                  className='h-[90vh] mr-4 lg:mr-10 flex flex-col justify-center bg-gray-400 dark:bg-gray-800 min-w-full sm:min-w-[370px] lg:min-w-[340px] xl:min-w-[370px] rounded-md p-4'
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
@@ -268,7 +145,7 @@ const KanbanStatic = () => {
                     {column?.title !== "undefined" && (
                       <div className='text-gray-100 bg-gray-600 dark:bg-gray-900 px-4 py-2 w-full rounded-md flex flex-row justify-between items-center'>
                         <div className='font-semibold'> {column?.title}</div>
-                        <div className='flex flex-row items-center justify-between w-[18%] sm:w-[12%]'>
+                        <div className='flex flex-row items-center justify-between w-[20%] sm:w-[14%]'>
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             fill='none'
@@ -288,99 +165,57 @@ const KanbanStatic = () => {
                       </div>
                     )}
                   </div>
-                  <div className='overflow-y-scroll overflow-x-hidden h-[80vh] my-2 py-1 scrollbar-hide'>
+
+                  <div className='overflow-y-scroll overflow-x-hidden h-[80vh] my-2 py-1 scrollbar-hide text-red-700'>
                     {column?.items !== "undefined" &&
                       column?.items.map((item, index) => {
                         return (
                           <div key={index} ref={tasksEndRef}>
-                            <TaskCard key={item.id} item={item} index={index} />
+                            <TaskCard
+                              key={item.id}
+                              item={item}
+                              index={index}
+                              setNewIcon={setNewIcon}
+                              columnId={columnId}
+                            />
                           </div>
                         );
                       })}
                     {provided.placeholder}
                   </div>
                   <div className='rounded-md p-1 min-h-[-50px]'>
-                    {columnId === "0" ? (
+                    {addTask && selectedId === columnId ? (
                       <div>
-                        {add1 && (
-                          <NewTask
-                            dataInit={newTodo}
-                            category={"To Do"}
-                            setNewData={setNewTodo}
-                            onClose={() => {
-                              setAdd1(false);
-                              setScrollDown(true);
-                            }}
-                          />
-                        )}
-                        <div
-                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
-                          onClick={() => {
-                            setAdd1(!add1);
-                            setAdd2(false);
-                            setAdd3(false);
+                        <NewTask
+                          title={column.title}
+                          setNewRows={setRows}
+                          columnId={columnId}
+                          onClose={() => {
+                            setScrollDown(true);
+                            setAddTask(false);
                           }}
-                        >
-                          <FontAwesomeIcon icon={add1 ? faXmark : faPlus} />
-                        </div>
+                        />
                       </div>
-                    ) : columnId === "1" ? (
-                      <div>
-                        {add2 && (
-                          <NewTask
-                            dataInit={newProgress}
-                            category={"In Progress"}
-                            setNewData={setNewProgress}
-                            onClose={() => {
-                              setAdd2(false);
-                              setScrollDown(true);
-                            }}
-                          />
-                        )}
-                        <div
-                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800  dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
-                          onClick={() => {
-                            setAdd1(false);
-                            setAdd2(!add2);
-                            setAdd3(false);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={add2 ? faXmark : faPlus} />
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        {add3 && (
-                          <NewTask
-                            dataInit={newDone}
-                            category={"Done"}
-                            setNewData={setNewDone}
-                            onClose={() => {
-                              setAdd3(false);
-                              setScrollDown(true);
-                            }}
-                          />
-                        )}
-                        <div
-                          className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800  dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
-                          onClick={() => {
-                            setAdd1(false);
-                            setAdd2(false);
-                            setAdd3(!add3);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={add3 ? faXmark : faPlus} />
-                        </div>
-                      </div>
-                    )}
+                    ) : null}
+                    <div
+                      className='flex flex-row shadow-none hover:shadow-md justify-center mt-4 text-gray-800 dark:text-gray-200 rounded-md p-2 cursor-pointer bg-gray-200 dark:bg-gray-900'
+                      onClick={() => selId(columnId)}
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                    </div>
                   </div>
                 </div>
               )}
             </Droppable>
           );
         })}
+        {showDot && (
+          <div className='bg-red-500 flex items-center justify-center h-4 rounded-full w-4 p-1'></div>
+        )}
         <div
-          onClick={() => setAddNewColumn(true)}
+          onClick={() => {
+            setAddNewColumn(true);
+          }}
           className='bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-600 hover:text-gray-100 hover:shadow-md p-2 rounded-md'
         >
           <svg
@@ -399,7 +234,13 @@ const KanbanStatic = () => {
           </svg>
         </div>
       </div>
-      {addNewColumn && <Modal onClickClose={() => setAddNewColumn(false)} />}
+
+      {addNewColumn && (
+        <Modal
+          setNewTitle={setTitle}
+          onClickClose={() => setAddNewColumn(false)}
+        />
+      )}
     </DragDropContext>
   );
 };

@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
-const Modal = ({ onClickClose }) => {
-  const [columnName] = useState({
+const titleSchema = Yup.object({
+  title: Yup.string()
+    .min(2, "Too Short!")
+    .max(16, "Too Long!")
+    .required("Title is required!"),
+});
+
+const Modal = ({ setNewTitle, onClickClose }) => {
+  const [form] = useState({
     title: "",
   });
-
   return (
     <div className='flex flex-col justify-center items-center fixed z-50 left-1/2 top-1/4'>
       <div
@@ -27,22 +34,25 @@ const Modal = ({ onClickClose }) => {
             </button>
           </div>
           <Formik
-            initialValues={columnName}
+            initialValues={form}
+            validationSchema={titleSchema}
             validateOnChange={false}
             validateOnBlur={false}
-            validate={(columnName) => {
-              let errors = {};
-              if (!columnName.title) {
-                errors.title = "Title shouldn't be empty!";
-              } else if (!/^\S.*$/.test(columnName.title)) {
-                errors.title = "Invalid entry!";
+            onSubmit={(form, { resetForm, setSubmitting }) => {
+              if (new RegExp(/^\s+|\s+$/g).test(form.title)) {
+                let newTitle = form.title.replace(/^\s+|\s+$/g, "");
+                if (newTitle === "") {
+                  resetForm({ values: "" });
+                } else {
+                  setNewTitle(newTitle);
+                  setSubmitting(false);
+                  onClickClose();
+                }
+              } else {
+                setNewTitle(form.title);
+                setSubmitting(false);
+                onClickClose();
               }
-              return errors;
-            }}
-            onSubmit={(columnName, { setSubmitting }) => {
-              setSubmitting(false);
-              console.log(columnName);
-              onClickClose();
             }}
           >
             {({ isSubmitting }) => (

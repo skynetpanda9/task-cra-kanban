@@ -1,49 +1,48 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { v4 as uuid } from "uuid";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { v4 as uuid } from "uuid";
+import * as Yup from "yup";
 
-const NewTask = ({ dataInit, setNewData, category, onClose }) => {
+const formSchema = Yup.object({
+  task: Yup.string()
+    .min(2, "Too Short!")
+    .max(16, "Too Long!")
+    .required("Task is required!"),
+});
+
+const NewTask = ({ setNewRows, columnId, onClose }) => {
   const date = new Date();
-  // const [error, setError] = useState(false);
   const [form] = useState({
     id: uuid(),
+    columnBelong: columnId,
     task: "",
-    category: category,
     dueDate: date,
+    icon: "",
   });
-
-  const insertObject = (arr, obj) => {
-    let finArr = [...arr, obj];
-    return finArr;
-  };
 
   return (
     <div>
       <Formik
         initialValues={form}
+        validationSchema={formSchema}
         validateOnChange={false}
         validateOnBlur={false}
-        validate={(form) => {
-          let errors = {};
-          if (!form.task) {
-            errors.task = "Task shouldn't be empty!";
-          }
-          return errors;
-        }}
         className='flex flex-col w-[100%] mt-4'
-        onSubmit={(form, { setSubmitting }) => {
+        onSubmit={(form, { resetForm, setSubmitting }) => {
           if (new RegExp(/^\s+|\s+$/g).test(form.task)) {
             let newTask = form.task.replace(/^\s+|\s+$/g, "");
-            let newForm = { ...form, task: newTask };
-            let newData = insertObject(dataInit, newForm);
-            setNewData(newData);
-            setSubmitting(false);
-            onClose();
+            if (newTask === "") {
+              resetForm({ values: "" });
+            } else {
+              let newForm = { ...form, task: newTask };
+              setNewRows(newForm);
+              setSubmitting(false);
+              onClose();
+            }
           } else {
-            let newData = insertObject(dataInit, form);
-            setNewData(newData);
+            setNewRows(form);
             setSubmitting(false);
             onClose();
           }
