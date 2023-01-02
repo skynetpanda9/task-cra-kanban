@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 import Modal from "../utils/Modal/Modal";
 import { AddIcon, StackIcon } from "../icons";
 
-const KanbanStatic = () => {
+const Trello = () => {
   const ref = useRef();
   const tasksEndRef = useRef(null);
   const [addTask, setAddTask] = useState(false);
@@ -64,9 +64,45 @@ const KanbanStatic = () => {
     }, 0);
   }, [icon]);
 
+  const selId = (id) => {
+    setSelectedId(id);
+    setAddTask(!addTask);
+  };
+
+  window.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented) {
+      return;
+    }
+    if (event.key === "Escape") {
+      setAddTask(false);
+      setAddNewColumn(false);
+    }
+  });
+
+  const scrollToBottom = () => {
+    tasksEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+    setTimeout(() => {
+      setScrollDown(false);
+    }, 50);
+  }, [scrollDown]);
+
   const onDragEnd = (result, columns, setColumns) => {
-    if (!result.destination) return;
-    const { source, destination } = result;
+    console.log("result type", result.type);
+    const { source, destination, type } = result;
+
+    if (!destination) return;
+    // Move List
+    if (type === "COLUMN") {
+      // Prevent update if nothing has changed
+      if (source.index !== destination.index) {
+      }
+      return;
+    }
+
     if (source.droppableId !== destination.droppableId) {
       const sourceColumn = columns[source.droppableId];
       const destColumn = columns[destination.droppableId];
@@ -100,32 +136,6 @@ const KanbanStatic = () => {
     }
   };
 
-  const scrollToBottom = () => {
-    tasksEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-    setTimeout(() => {
-      setScrollDown(false);
-    }, 50);
-  }, [scrollDown]);
-
-  const selId = (id) => {
-    setSelectedId(id);
-    setAddTask(!addTask);
-  };
-
-  window.addEventListener("keydown", (event) => {
-    if (event.defaultPrevented) {
-      return;
-    }
-    if (event.key === "Escape") {
-      setAddTask(false);
-      setAddNewColumn(false);
-    }
-  });
-
   return (
     <DragDropContext
       onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
@@ -133,7 +143,12 @@ const KanbanStatic = () => {
       <div ref={ref} className='flex flex-row items-center justify-start p-4'>
         {Object.entries(columns)?.map(([columnId, column]) => {
           return (
-            <Droppable key={columnId} droppableId={columnId}>
+            <Droppable
+              key={columnId}
+              droppableId={columnId}
+              direction='horizontal'
+              type='COLUMN'
+            >
               {(provided, snapshot) => (
                 <div
                   className='h-[90vh] mr-4 lg:mr-10 flex flex-col justify-center bg-gray-400 dark:bg-gray-800 min-w-full sm:min-w-[370px] lg:min-w-[340px] xl:min-w-[370px] rounded-md p-4'
@@ -151,7 +166,6 @@ const KanbanStatic = () => {
                       </div>
                     )}
                   </div>
-
                   <div className='overflow-y-scroll overflow-x-hidden h-[80vh] my-2 py-1 scrollbar-hide text-red-700'>
                     {column?.items !== "undefined" &&
                       column?.items.map((item, index) => {
@@ -195,6 +209,7 @@ const KanbanStatic = () => {
             </Droppable>
           );
         })}
+
         {showDot && (
           <div className='bg-red-500 flex items-center justify-center h-4 rounded-full w-4 p-1'></div>
         )}
@@ -207,7 +222,6 @@ const KanbanStatic = () => {
           <AddIcon />
         </div>
       </div>
-
       {addNewColumn && (
         <Modal
           setNewTitle={setTitle}
@@ -218,4 +232,4 @@ const KanbanStatic = () => {
   );
 };
 
-export default KanbanStatic;
+export default Trello;
