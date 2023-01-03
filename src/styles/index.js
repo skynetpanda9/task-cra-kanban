@@ -75,8 +75,23 @@ export const TaskEditorStyles = {
     " ml-2 px-2 py-3 border-none rounded-md resize-none outline-none text-sm bg-gray-300 dark:bg-gray-500 text-gray-800 dark:text-gray-200",
 };
 export const TaskStyles = {
-  task: "relative flex flex-row items-center justify-between cursor-pointer backdrop-blur-sm bg-white/30 dark:bg-gray-500/20 m-2 p-3 bg-gray-300 dark:bg-gray-700 rounded-md shadow-md text-sm break-words min-h-[18px] hover:bg-gray-300",
+  task: "relative flex flex-row items-center justify-between cursor-pointer backdrop-blur-sm bg-white/30 dark:bg-gray-500/20 m-2 p-3 bg-gray-300 dark:bg-gray-700 rounded-md shadow-md text-sm break-words min-h-[18px] hover:bg-gray-300 dark:hover:bg-gray-600",
   taskIcons: "absolute top-2 right-2 flex flex-row justify-end",
   taskIc:
     "cursor-pointer w-[24px] h-[24px] flex items-center justify-center rounded-md m-0 p-0 text-gray-900 bg-gray-300 hover:shadow-md ",
+};
+
+export const AssigneeModalStyles = {
+  amMain:
+    "flex flex-col justify-center items-center fixed z-50 left-1/2 top-1/4  cursor-default",
+  amModal:
+    "bg-gray-200 dark:bg-gray-700 w-[270px] rounded-md drop-shadow-md dark:shadow-gray-500 dark:shadow max-w-[250px] z-50 m-auto p-2 fixed top-1/4",
+  amTitle:
+    "flex flex-row items-center justify-between w-full p-2 bg-gray-300 dark:bg-gray-800 rounded-md",
+  amTitleText: "font-semibold text-lg text-gray-800 dark:text-gray-300",
+  amIconMain:
+    "flex flex-col py-2 px-1 items-center justify-center text-gray-800 dark:text-gray-300",
+  amIcon:
+    "flex flex-row p-2 items-center w-full justify-between cursor-pointer rounded-md hover:bg-gray-400 dark:hover:bg-gray-800 hover:shadow-md",
+  amBack: "fixed top-0 left-0 w-full h-full z-10 bg-black opacity-60",
 };

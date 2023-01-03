@@ -6,16 +6,12 @@ import shortid from "shortid";
 
 import Task from "./Task";
 import TaskEditor from "./TaskEditor";
-import ColumnEditor from "./ColumnEditor";
 import { ColumnStyles } from "../styles";
 import { connect } from "react-redux";
 import { AddIcon } from "../icons";
 
 const Column = ({ list, listId, index }) => {
   const dispatch = useDispatch();
-
-  const [editingTitle, setEditingTitle] = useState(false);
-  const [title, setTitle] = useState(list.title);
   const [addingCard, setAddingCard] = useState(false);
 
   const toggleAddingCard = () => setAddingCard(!addingCard);
@@ -29,18 +25,6 @@ const Column = ({ list, listId, index }) => {
     });
   };
 
-  const toggleEditingTitle = () => setEditingTitle(!editingTitle);
-
-  const handleChangeTitle = (e) => setTitle(e.target.value);
-
-  const editListTitle = async () => {
-    toggleEditingTitle();
-    dispatch({
-      type: "CHANGE_LIST_TITLE",
-      payload: { listId, listTitle: title },
-    });
-  };
-
   return (
     <Draggable draggableId={list._id} index={index}>
       {(provided, snapshot) => (
@@ -50,19 +34,7 @@ const Column = ({ list, listId, index }) => {
           {...provided.dragHandleProps}
           className={ColumnStyles.Column}
         >
-          {/* {editingTitle ? (
-            <ColumnEditor
-              list={list}
-              title={title}
-              handleChangeTitle={handleChangeTitle}
-              saveList={editListTitle}
-              onClickOutside={editListTitle}
-            />
-          ) :  */}
-
-          <div className={ColumnStyles.editList} onClick={toggleEditingTitle}>
-            {list.title}
-          </div>
+          <div className={ColumnStyles.editList}>{list.title}</div>
 
           <Droppable droppableId={list._id}>
             {(provided, _snapshot) => (

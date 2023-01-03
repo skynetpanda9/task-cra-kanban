@@ -1,41 +1,35 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { createRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { ColumnEditorStyles } from "../styles";
 
 const ColumnEditor = ({
-  saveList,
+  onEnter,
   title,
   onClickOutside,
   handleChangeTitle,
 }) => {
-  const ref = createRef();
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          return;
+        }
+        onClickOutside();
+      }
+      document.addEventListener("mousedown", handleClickOutside, false);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside, false);
+      };
+    }, [ref]);
+  }
 
-  const onEnter = (e) => {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      saveList();
-    }
-  };
-
-  const handleClick = (e) => {
-    let node = ref.current;
-    if (node.contains(e.target)) {
-      return;
-    }
-    onClickOutside();
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClick, false);
-    return () => {
-      document.removeEventListener("mousedown", handleClick, false);
-    };
-  }, []);
+  const wrapperRef = useRef();
+  useOutsideAlerter(wrapperRef);
 
   return (
-    <div className='flex items-center' ref={ref}>
+    <div className='flex items-center' ref={wrapperRef}>
       <TextareaAutosize
         autoFocus
         className={ColumnEditorStyles.ceText}

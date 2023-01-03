@@ -28,21 +28,18 @@ const listsById = (state = {}, action) => {
         [listId]: { _id: listId, title: listTitle, cards: [] },
       };
     }
-    case "CHANGE_LIST_TITLE": {
-      const { listId, listTitle } = action.payload;
-      return {
-        ...state,
-        [listId]: { ...state[listId], title: listTitle },
-      };
-    }
 
     case "ADD_TASK": {
       const { listId, cardId } = action.payload;
       return {
         ...state,
-        [listId]: { ...state[listId], cards: [...state[listId].cards, cardId] },
+        [listId]: {
+          ...state[listId],
+          cards: [...state[listId].cards, cardId],
+        },
       };
     }
+
     case "MOVE_CARD": {
       const { oldCardIndex, newCardIndex, sourceListId, destListId } =
         action.payload;
@@ -76,14 +73,22 @@ const listsById = (state = {}, action) => {
 const cardsById = (state = {}, action) => {
   switch (action.type) {
     case "ADD_TASK": {
-      const { cardText, cardId } = action.payload;
-      return { ...state, [cardId]: { text: cardText, _id: cardId } };
+      const { cardText, cardId, cardUser } = action.payload;
+      return {
+        ...state,
+        [cardId]: { text: cardText, _id: cardId, user: cardUser },
+      };
     }
+
+    case "UPDATE_USER": {
+      const { cardUser, cardId } = action.payload;
+      return { ...state, [cardId]: { ...state[cardId], user: cardUser } };
+    }
+
     case "CHANGE_CARD_TEXT": {
       const { cardText, cardId } = action.payload;
       return { ...state, [cardId]: { ...state[cardId], text: cardText } };
     }
-
     default:
       return state;
   }

@@ -2,8 +2,9 @@
 import React from "react";
 import users from "../data/userData";
 import { CloseIcon } from "../icons";
+import { AssigneeModalStyles } from "../styles";
 
-const AssigneeModal = ({ item, assignToggle, setNewIcon, columnId }) => {
+const AssigneeModal = ({ setIcon, setUserFn, assignToggle }) => {
   window.addEventListener("keydown", (event) => {
     if (event.defaultPrevented) {
       return;
@@ -12,35 +13,29 @@ const AssigneeModal = ({ item, assignToggle, setNewIcon, columnId }) => {
       assignToggle(false);
     }
   });
+
   return (
-    <div className='flex flex-col justify-center items-center fixed z-50 left-1/2 top-1/4  cursor-default'>
+    <div className={AssigneeModalStyles.amMain}>
       <div
-        className='bg-gray-200 dark:bg-gray-700 w-[270px] rounded-md drop-shadow-md dark:shadow-gray-500 dark:shadow max-w-[250px] z-50 m-auto p-2 fixed top-1/4'
+        className={AssigneeModalStyles.amModal}
         role='dialog'
         aria-modal='true'
       >
-        <div className='flex flex-row items-center justify-between w-full p-2 bg-gray-300 dark:bg-gray-800 rounded-md'>
-          <p className='font-semibold text-lg text-gray-800 dark:text-gray-300'>
-            Assign to
-          </p>
+        <div className={AssigneeModalStyles.amTitle}>
+          <p className={AssigneeModalStyles.amTitleText}>Assign to</p>
           <CloseIcon toggle={() => assignToggle(false)} />
         </div>
-        <div className='flex flex-col py-2 px-1 items-center justify-center text-gray-800 dark:text-gray-300'>
+        <div className={AssigneeModalStyles.amIconMain}>
           {users.map((user) => {
             return (
               <ul key={user.id} className='w-full'>
                 <li
                   onClick={() => {
-                    const test = {
-                      ...item,
-                      iconId: user.id,
-                      icon: user.icon,
-                      columnId: columnId,
-                    };
-                    setNewIcon(test);
+                    setIcon(user.icon);
+                    setUserFn(user.icon);
                     assignToggle(false);
                   }}
-                  className='flex flex-row p-2 items-center w-full justify-between cursor-pointer rounded-md hover:bg-gray-400 dark:hover:bg-gray-800 hover:shadow-md'
+                  className={AssigneeModalStyles.amIcon}
                 >
                   <div className='font-medium'>{user.name}</div>
                   <div>{user.icon}</div>
@@ -50,7 +45,7 @@ const AssigneeModal = ({ item, assignToggle, setNewIcon, columnId }) => {
           })}
         </div>
       </div>
-      <div className='fixed top-0 left-0 w-full h-full z-10 bg-black opacity-60'></div>
+      <div className={AssigneeModalStyles.amBack}></div>
     </div>
   );
 };

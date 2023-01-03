@@ -2,7 +2,6 @@
 import React from "react";
 import MainLayout from "../Layouts/MainLayout";
 import Header from "../components/Header";
-import Trello from "../components/Trello";
 import { DashStyle } from "../styles";
 import Board from "../components/Board";
 
@@ -12,7 +11,6 @@ function Dashboard() {
       <div className={DashStyle.DashMain}>
         <Header />
         <MainLayout>
-          {/* <Trello /> */}
           <Board />
         </MainLayout>
       </div>
