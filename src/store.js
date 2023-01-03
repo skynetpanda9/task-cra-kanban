@@ -79,16 +79,11 @@ const cardsById = (state = {}, action) => {
         [cardId]: { text: cardText, _id: cardId, user: cardUser },
       };
     }
-
     case "UPDATE_USER": {
       const { cardUser, cardId } = action.payload;
       return { ...state, [cardId]: { ...state[cardId], user: cardUser } };
     }
 
-    case "CHANGE_CARD_TEXT": {
-      const { cardText, cardId } = action.payload;
-      return { ...state, [cardId]: { ...state[cardId], text: cardText } };
-    }
     default:
       return state;
   }

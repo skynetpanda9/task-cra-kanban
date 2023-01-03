@@ -25,6 +25,15 @@ const Column = ({ list, listId, index }) => {
     });
   };
 
+  window.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented) {
+      return;
+    }
+    if (event.key === "Escape") {
+      setAddingCard(false);
+    }
+  });
+
   return (
     <Draggable draggableId={list._id} index={index}>
       {(provided, snapshot) => (

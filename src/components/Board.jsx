@@ -18,6 +18,15 @@ const Board = ({ board }) => {
     setAddingList(!addingList);
   };
 
+  window.addEventListener("keydown", (event) => {
+    if (event.defaultPrevented) {
+      return;
+    }
+    if (event.key === "Escape") {
+      setAddingList(false);
+    }
+  });
+
   const handleDragEnd = ({ source, destination, type }) => {
     // dropped outside the allowed zones
     if (!destination) return;
