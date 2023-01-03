@@ -34,13 +34,11 @@ const AddColumn = ({ toggleAddingList }) => {
           setTitle("");
         } else {
           if (newTask.length > 20 || newTask.length < 3) {
-            setTitle("");
             setError("Task should be between 3-20 chars!");
             setShowError(true);
           } else createList();
         }
       } else if (title.length > 20 || title.length < 3) {
-        setTitle("");
         setError("Task should be between 3-20 chars");
         setShowError(true);
       } else {
@@ -59,13 +57,11 @@ const AddColumn = ({ toggleAddingList }) => {
         setTitle("");
       } else {
         if (newTask.length > 20 || newTask.length < 3) {
-          setTitle("");
           setError("Task should be between 3-20 chars!");
           setShowError(true);
         } else createList();
       }
     } else if (title.length > 20 || title.length < 3) {
-      setTitle("");
       setError("Task should be between 3-20 chars");
       setShowError(true);
     } else {

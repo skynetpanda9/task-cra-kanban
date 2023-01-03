@@ -25,13 +25,11 @@ const TaskEditor = ({ text, onSave, onCancel, adding }) => {
           setmText("");
         } else {
           if (newTask.length > 20 || newTask.length < 3) {
-            setmText("");
             setError("Task should be between 3-20 chars!");
             setShowError(true);
           } else onSave(newTask);
         }
       } else if (mtext.length > 20 || mtext.length < 3) {
-        setmText("");
         setError("Task should be between 3-20 chars");
         setShowError(true);
       } else {
@@ -51,13 +49,11 @@ const TaskEditor = ({ text, onSave, onCancel, adding }) => {
         setmText("");
       } else {
         if (newTask.length > 20 || newTask.length < 3) {
-          setmText("");
           setError("Task should be between 3-20 chars!");
           setShowError(true);
         } else onSave(newTask);
       }
     } else if (mtext.length > 20 || mtext.length < 3) {
-      setmText("");
       setError("Task should be between 3-20 chars");
       setShowError(true);
     } else {
