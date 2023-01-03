@@ -4,7 +4,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import EditButtons from "./EditButtons";
 import { TaskEditorStyles } from "../styles";
 
-const TaskEditor = ({ text, onSave, onCancel, adding }) => {
+const TaskEditor = ({ text, onAdd, onSave, onCancel, adding }) => {
   const [mtext, setmText] = useState(text);
   const [showError, setShowError] = useState(false);
   const [error, setError] = useState("");
@@ -27,12 +27,16 @@ const TaskEditor = ({ text, onSave, onCancel, adding }) => {
           if (newTask.length > 20 || newTask.length < 3) {
             setError("Task should be between 3-20 chars!");
             setShowError(true);
-          } else onSave(newTask);
+          } else {
+            onAdd(true);
+            onSave(newTask);
+          }
         }
       } else if (mtext.length > 20 || mtext.length < 3) {
         setError("Task should be between 3-20 chars");
         setShowError(true);
       } else {
+        onAdd(true);
         onSave(mtext);
       }
     }
@@ -51,12 +55,16 @@ const TaskEditor = ({ text, onSave, onCancel, adding }) => {
         if (newTask.length > 20 || newTask.length < 3) {
           setError("Task should be between 3-20 chars!");
           setShowError(true);
-        } else onSave(newTask);
+        } else {
+          onAdd(true);
+          onSave(newTask);
+        }
       }
     } else if (mtext.length > 20 || mtext.length < 3) {
       setError("Task should be between 3-20 chars");
       setShowError(true);
     } else {
+      onAdd(true);
       onSave(mtext);
     }
   };

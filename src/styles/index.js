@@ -39,7 +39,7 @@ export const MainLayoutStyles = {
 };
 
 export const BoardStyles = {
-  board: "h-[92%] flex overflow-x-auto",
+  board: "h-screen flex overflow-x-auto",
   addList: "w-[272px] m-2 flex-shrink-0",
   listButton:
     "bg-gray-600 dark:bg-gray-700 rounded-md cursor-pointer text-gray-300 flex w-[170px] items-center justify-between min-h-[32px] py-1 px-2 h-fit transition hover:bg-gray-800",
@@ -63,11 +63,11 @@ export const ColumnEditorStyles = {
 
 export const ColumnStyles = {
   Column:
-    "bg-gray-400 dark:bg-gray-800 flex-shrink-0 w-[260px] h-fit m-2 mr-0 rounded-md shadow-md text-gray-900 dark:text-gray-200",
+    "bg-gray-400 dark:bg-gray-800 flex-shrink-0 w-[260px] h-fit overflow-y-scroll scrollbar-hide min-h-[20vh] max-h-[90vh] m-2 rounded-md shadow-md text-gray-900 dark:text-gray-200",
+  editList:
+    "cursor-pointer w-[260px] p-3 text-gray-200 rounded-md bg-gray-500 dark:bg-gray-700 break-words z-10",
   cAddCard:
     "cursor-pointer py-3 px-2 text-gray-200 rounded-md flex items-center",
-  editList:
-    "cursor-pointer p-3 text-gray-200 rounded-md bg-gray-500 dark:bg-gray-700 break-words",
 };
 
 export const TaskEditorStyles = {
