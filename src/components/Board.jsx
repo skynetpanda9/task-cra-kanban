@@ -7,6 +7,7 @@ import { BoardStyles } from "../styles";
 import Column from "./Column";
 import AddColumn from "./AddColumn";
 import { connect } from "react-redux";
+import { AddIcon } from "../icons";
 
 const Board = ({ board }) => {
   const dispatch = useDispatch();
@@ -69,7 +70,8 @@ const Board = ({ board }) => {
                   onClick={toggleAddingList}
                   className={BoardStyles.listButton}
                 >
-                  <ion-icon className='mr-1' name='add' /> Add a list
+                  <AddIcon name='add' />
+                  <p className='mr-3'>Add a column</p>
                 </div>
               )}
             </div>

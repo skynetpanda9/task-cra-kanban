@@ -9,6 +9,7 @@ import TaskEditor from "./TaskEditor";
 import ColumnEditor from "./ColumnEditor";
 import { ColumnStyles } from "../styles";
 import { connect } from "react-redux";
+import { AddIcon } from "../icons";
 
 const Column = ({ list, listId, index }) => {
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ const Column = ({ list, listId, index }) => {
           {...provided.dragHandleProps}
           className={ColumnStyles.Column}
         >
-          {editingTitle ? (
+          {/* {editingTitle ? (
             <ColumnEditor
               list={list}
               title={title}
@@ -57,14 +58,11 @@ const Column = ({ list, listId, index }) => {
               saveList={editListTitle}
               onClickOutside={editListTitle}
             />
-          ) : (
-            <div
-              className='cursor-pointer p-2 break-words'
-              onClick={toggleEditingTitle}
-            >
-              {list.title}
-            </div>
-          )}
+          ) :  */}
+
+          <div className={ColumnStyles.editList} onClick={toggleEditingTitle}>
+            {list.title}
+          </div>
 
           <Droppable droppableId={list._id}>
             {(provided, _snapshot) => (
@@ -78,9 +76,7 @@ const Column = ({ list, listId, index }) => {
                       listId={list._id}
                     />
                   ))}
-
                 {provided.placeholder}
-
                 {addingCard ? (
                   <TaskEditor
                     onSave={addCard}
@@ -92,7 +88,8 @@ const Column = ({ list, listId, index }) => {
                     className={ColumnStyles.cAddCard}
                     onClick={toggleAddingCard}
                   >
-                    <ion-icon className='mr-1' name='add' /> Add a card
+                    <AddIcon className='mr-1' name='add' />
+                    <p className='ml-2'>Add new card</p>
                   </div>
                 )}
               </div>

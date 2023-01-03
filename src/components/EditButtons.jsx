@@ -1,4 +1,5 @@
 import React from "react";
+import { CloseIcon } from "../icons";
 import { EditButtonsStyles } from "../styles";
 
 const EditButtons = ({ handleSave, saveLabel, handleCancel }) => (
@@ -10,13 +11,12 @@ const EditButtons = ({ handleSave, saveLabel, handleCancel }) => (
     >
       {saveLabel}
     </div>
-
     <div
       tabIndex='0'
       className={EditButtonsStyles.EditClose}
       onClick={handleCancel}
     >
-      <ion-icon name='close' />
+      <CloseIcon name='close' />
     </div>
   </div>
 );

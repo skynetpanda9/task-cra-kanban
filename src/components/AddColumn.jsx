@@ -19,14 +19,13 @@ const AddColumn = ({ toggleAddingList }) => {
     });
   };
   return (
-    <div className='bg-["#dfe3e6"] rounded-md p-0.5'>
+    <div className='bg-gray-400 dark:bg-gray-700 rounded-md p-1'>
       <ColumnEditor
         title={title}
         handleChangeTitle={handleChangeTitle}
         onClickOutside={toggleAddingList}
         saveList={createList}
       />
-
       <EditButtons
         handleSave={createList}
         saveLabel={"Add Column"}

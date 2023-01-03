@@ -42,12 +42,12 @@ export const BoardStyles = {
   board: "h-[92%] flex overflow-x-auto",
   addList: "w-[272px] m-2 flex-shrink-0",
   listButton:
-    "bg-gray-900 rounded-md cursor-pointer text-gray-300 flex items-center min-h-[32px] py-1 px-2 h-fit transition hover:bg-gray-800",
+    "bg-gray-600 dark:bg-gray-700 rounded-md cursor-pointer text-gray-300 flex w-[170px] items-center justify-between min-h-[32px] py-1 px-2 h-fit transition hover:bg-gray-800",
 };
 
 export const EditButtonsStyles = {
   EditButtonGreen:
-    'cursor-pointer shadow-md w-fit mr-1.5 mb-3 py-1.5 px-3 bg-["#5aac44"] rounded-md text-gray-100 font-bold outline-none hover:opacity-70',
+    "cursor-pointer w-fit ml-2 mr-1.5 mb-3 py-1 px-3 bg-gray-700 dark:bg-gray-900 rounded-md text-gray-100 font-normal outline-none hover:shadow-md hover:opacity-70",
   EditButtonRed:
     'cursor-pointer shadow-md w-fit ml-0 mr-1.5 mb-3 py-1.5 px-3 bg-["#EA2525"] rounded-md text-gray-100 font-bold outline-none hover:opacity-70',
   EditClose:
@@ -56,23 +56,27 @@ export const EditButtonsStyles = {
 
 export const ColumnEditorStyles = {
   ceText:
-    "rounded border-none resize-none outline-none text-base p-1 my-2 mr-0 ml-2 focus:shadow-md",
+    "rounded bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-gray-500 border-none resize-none outline-none text-base p-1 my-2 mr-0 ml-2 focus:shadow-md",
   ceIcon:
     "cursor-pointer text-2xl rounded-md text-gray-900 hover:bg-gray-300 p-1 my-0.5 mx-1",
 };
 export const ColumnStyles = {
   Column:
-    "bg-gray-200 flex-shrink-0 w-[272px] h-fit m-2 mr-0 rounded-md border border-solid border-gray-600",
-  cAddCard: "cursor-pointer p-2 text-gray-800 rounded-md flex items-center",
+    "bg-gray-400 dark:bg-gray-800 flex-shrink-0 w-[272px] h-fit m-2 mr-0 rounded-md shadow-md text-gray-900 dark:text-gray-200",
+  cAddCard:
+    "cursor-pointer py-3 px-2 text-gray-200 rounded-md flex items-center",
+  editList:
+    "cursor-pointer p-3 text-gray-200 rounded-md bg-gray-500 dark:bg-gray-700 break-words",
 };
 
 export const TaskEditorStyles = {
-  common: "min-h-[50px] pl-2 pr-5 hover:bg-gray-300",
-  textArea: "w-full border-none resize-none outline-none text-sm",
+  common: "min-h-[50px] py-2 w-full bg-gray-400 dark:bg-gray-800",
+  textArea:
+    " ml-2 px-2 py-3 border-none rounded-md resize-none outline-none text-sm bg-gray-300 dark:bg-gray-500 text-gray-800 dark:text-gray-200",
 };
 export const TaskStyles = {
-  task: "relative cursor-pointer bg-gray-100 m-2 p-4 rounded-md border shadow-md text-sm break-words min-h-[18px] hover:bg-green-300",
+  task: "relative flex flex-row items-center justify-between cursor-pointer backdrop-blur-sm bg-white/30 dark:bg-gray-500/20 m-2 p-3 bg-gray-300 dark:bg-gray-700 rounded-md shadow-md text-sm break-words min-h-[18px] hover:bg-gray-300",
   taskIcons: "absolute top-2 right-2 flex flex-row justify-end",
   taskIc:
-    "cursor-pointer w-[24px] h-[24px] flex items-center justify-center rounded-md m-0.5 text-gray-900 bg-gray-300 opacity-90 hover:opacity-100 hover:bg-gray-400",
+    "cursor-pointer w-[24px] h-[24px] flex items-center justify-center rounded-md m-0 p-0 text-gray-900 bg-gray-300 hover:shadow-md ",
 };

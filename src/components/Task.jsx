@@ -6,6 +6,7 @@ import { TaskStyles } from "../styles";
 
 import TaskEditor from "./TaskEditor";
 import { connect } from "react-redux";
+import { EditIcon } from "../icons";
 
 const Task = ({ card, index }) => {
   const [text, setText] = useState("");
@@ -48,13 +49,13 @@ const Task = ({ card, index }) => {
             onMouseEnter={startHover}
             onMouseLeave={endHover}
           >
-            {hover && (
+            {/* {hover && (
               <div className={TaskStyles.taskIcons}>
                 <div className={TaskStyles.taskIc} onClick={startEditing}>
-                  <ion-icon name='create' />
+                  <EditIcon name='create' />
                 </div>
               </div>
-            )}
+            )} */}
             {card.text}
           </div>
         )}
