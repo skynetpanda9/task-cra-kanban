@@ -1,20 +1,19 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { BoardStyles } from "../styles";
 
 import Column from "./Column";
 import AddColumn from "./AddColumn";
+import { connect } from "react-redux";
 
-const Board = () => {
+const Board = ({ board }) => {
   const dispatch = useDispatch();
-  const board = useSelector((state) => state.board);
 
   const [addingList, setAddingList] = useState(false);
 
   const toggleAddingList = () => {
-    console.log("clicked------", addingList);
     setAddingList(!addingList);
   };
 
@@ -56,7 +55,7 @@ const Board = () => {
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId='board' direction='horizontal' type='COLUMN'>
-        {(provided, _snapshot) => (
+        {(provided, snapshot) => (
           <div className={BoardStyles.board} ref={provided.innerRef}>
             {board.lists.map((listId, index) => {
               return <Column listId={listId} key={listId} index={index} />;
@@ -81,4 +80,6 @@ const Board = () => {
   );
 };
 
-export default Board;
+const mapStateToProps = (state) => ({ board: state.board });
+
+export default connect(mapStateToProps)(Board);

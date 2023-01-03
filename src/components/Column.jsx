@@ -1,16 +1,16 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import shortid from "shortid";
 
 import Task from "./Task";
 import TaskEditor from "./TaskEditor";
 import ColumnEditor from "./ColumnEditor";
 import { ColumnStyles } from "../styles";
+import { connect } from "react-redux";
 
-const Column = ({ listId }, index) => {
-  const list = useSelector((state) => state.listsById[listId]);
+const Column = ({ list, listId, index }) => {
   const dispatch = useDispatch();
 
   const [editingTitle, setEditingTitle] = useState(false);
@@ -104,4 +104,8 @@ const Column = ({ listId }, index) => {
   );
 };
 
-export default Column;
+const mapStateToProps = (state, ownProps) => ({
+  list: state.listsById[ownProps.listId],
+});
+
+export default connect(mapStateToProps)(Column);

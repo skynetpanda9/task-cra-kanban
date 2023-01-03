@@ -1,6 +1,4 @@
 import { combineReducers, legacy_createStore as createStore } from "redux";
-// import throttle from "lodash.throttle";
-// import seed from "./seed";
 
 const board = (state = { lists: [] }, action) => {
   switch (action.type) {
@@ -15,12 +13,7 @@ const board = (state = { lists: [] }, action) => {
       newLists.splice(newListIndex, 0, removedList);
       return { lists: newLists };
     }
-    // case "DELETE_LIST": {
-    //   const { listId } = action.payload;
-    //   const filterDeleted = (tmpListId) => tmpListId !== listId;
-    //   const newLists = state.lists.filter(filterDeleted);
-    //   return { lists: newLists };
-    // }
+
     default:
       return state;
   }
@@ -90,21 +83,7 @@ const cardsById = (state = {}, action) => {
       const { cardText, cardId } = action.payload;
       return { ...state, [cardId]: { ...state[cardId], text: cardText } };
     }
-    // case "DELETE_CARD": {
-    //   const { cardId } = action.payload;
-    //   const { [cardId]: deletedCard, ...restOfCards } = state;
-    //   return restOfCards;
-    // }
-    // Find every card from the deleted list and remove it
-    // case "DELETE_LIST": {
-    //   const { cards: cardIds } = action.payload;
-    //   return Object.keys(state)
-    //     .filter((cardId) => !cardIds.includes(cardId))
-    //     .reduce(
-    //       (newState, cardId) => ({ ...newState, [cardId]: state[cardId] }),
-    //       {}
-    //     );
-    // }
+
     default:
       return state;
   }
@@ -118,39 +97,4 @@ const reducers = combineReducers({
 
 const store = createStore(reducers);
 
-// store.subscribe(
-//   throttle(() => {
-//     saveState(store.getState());
-//   }, 1000)
-// );
-
-// console.log(store.getState());
-// if (!store.getState().board.lists.length) {
-//   console.log("SEED");
-//   // seed(store);
-// }
-
 export default store;
-
-// const saveState = (state) => {
-//   try {
-//     const serializedState = JSON.stringify(state);
-//     localStorage.setItem("state", serializedState);
-//   } catch {
-//     // ignore write errors
-//   }
-// };
-
-// const loadState = () => {
-//   try {
-//     const serializedState = localStorage.getItem("state");
-//     if (serializedState === null) {
-//       return undefined;
-//     }
-//     return JSON.parse(serializedState);
-//   } catch (err) {
-//     return undefined;
-//   }
-// };
-
-// const persistedState = loadState();

@@ -1,18 +1,17 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
-import TaskEditor from "./TaskEditor";
 import { TaskStyles } from "../styles";
 
-const Task = (listId, index) => {
+import TaskEditor from "./TaskEditor";
+import { connect } from "react-redux";
+
+const Task = ({ card, index }) => {
   const [text, setText] = useState("");
   const [hover, setHover] = useState(false);
   const [editing, setEditing] = useState(false);
 
-  const card = useSelector(
-    (state, ownProps) => state.cardsById[ownProps.cardId]
-  );
   const dispatch = useDispatch();
 
   const startHover = () => setHover(true);
@@ -37,15 +36,6 @@ const Task = (listId, index) => {
     });
   };
 
-  const deleteCard = async () => {
-    if (window.confirm("Are you sure to delete this card?")) {
-      dispatch({
-        type: "DELETE_CARD",
-        payload: { cardId: card._id, listId },
-      });
-    }
-  };
-
   if (!editing) {
     return (
       <Draggable draggableId={card._id} index={index}>
@@ -65,7 +55,6 @@ const Task = (listId, index) => {
                 </div>
               </div>
             )}
-
             {card.text}
           </div>
         )}
@@ -73,14 +62,13 @@ const Task = (listId, index) => {
     );
   } else {
     return (
-      <TaskEditor
-        text={card.text}
-        onSave={editCard}
-        onDelete={deleteCard}
-        onCancel={endEditing}
-      />
+      <TaskEditor text={card.text} onSave={editCard} onCancel={endEditing} />
     );
   }
 };
 
-export default Task;
+const mapStateToProps = (state, ownProps) => ({
+  card: state.cardsById[ownProps.cardId],
+});
+
+export default connect(mapStateToProps)(Task);

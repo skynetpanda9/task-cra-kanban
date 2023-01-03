@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import shortid from "shortid";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import ColumnEditor from "./ColumnEditor";
 import EditButtons from "./EditButtons";
 
@@ -36,4 +36,4 @@ const AddColumn = ({ toggleAddingList }) => {
   );
 };
 
-export default AddColumn;
+export default connect()(AddColumn);

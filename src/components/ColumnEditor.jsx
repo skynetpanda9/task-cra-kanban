@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useRef } from "react";
+import React, { createRef, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { ColumnEditorStyles } from "../styles";
 
 const ColumnEditor = ({
   saveList,
-  onClickOutside,
   title,
+  onClickOutside,
   handleChangeTitle,
 }) => {
-  const ref = useRef(null);
+  const ref = createRef();
 
   const onEnter = (e) => {
     if (e.keyCode === 13) {
@@ -20,19 +20,19 @@ const ColumnEditor = ({
   };
 
   const handleClick = (e) => {
-    const node = ref.current;
+    let node = ref.current;
     if (node.contains(e.target)) {
       return;
     }
     onClickOutside();
   };
 
-  // useEffect(() => {
-  //   document.addEventListener("click", handleClick, false);
-  //   return () => {
-  //     document.removeEventListener("click", handleClick, false);
-  //   };
-  // }, []);
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClick, false);
+    return () => {
+      document.removeEventListener("mousedown", handleClick, false);
+    };
+  }, []);
 
   return (
     <div className='flex items-center' ref={ref}>

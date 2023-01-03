@@ -4,8 +4,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import EditButtons from "./EditButtons";
 import { TaskEditorStyles } from "../styles";
 
-const TaskEditor = (text, onSave, onCancel, onDelete, adding) => {
-  const [mtext, setmText] = useState(text ? text : "");
+const TaskEditor = ({ text, onSave, onCancel, adding }) => {
+  const [mtext, setmText] = useState(text);
 
   const handleChangeText = (e) => setmText(e.target.value);
 
@@ -23,15 +23,14 @@ const TaskEditor = (text, onSave, onCancel, onDelete, adding) => {
           autoFocus
           className={TaskEditorStyles.textArea}
           placeholder='Enter the text for this card...'
-          value={text}
+          value={mtext}
           onChange={handleChangeText}
           onKeyDown={onEnter}
         />
       </div>
       <EditButtons
-        handleSave={() => onSave(text)}
+        handleSave={() => onSave(mtext)}
         saveLabel={adding ? "Add card" : "Save"}
-        handleDelete={onDelete}
         handleCancel={onCancel}
       />
     </div>
