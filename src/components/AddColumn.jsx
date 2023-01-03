@@ -1,14 +1,18 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import shortid from "shortid";
 import { connect, useDispatch } from "react-redux";
 import ColumnEditor from "./ColumnEditor";
 import EditButtons from "./EditButtons";
+import { useOnClickOutside } from "../utils/ClickOutside";
 
 const AddColumn = ({ toggleAddingList }) => {
   const [title, setTitle] = useState("");
   const [showError, setShowError] = useState(false);
   const [error, setError] = useState("");
+
+  // const ref = useRef();
+  // useOnClickOutside(ref, () => toggleAddingList(false));
 
   const dispatch = useDispatch();
 
@@ -74,7 +78,6 @@ const AddColumn = ({ toggleAddingList }) => {
       <ColumnEditor
         title={title}
         handleChangeTitle={handleChangeTitle}
-        onClickOutside={toggleAddingList}
         onEnter={onEnter}
       />
       {showError ? (

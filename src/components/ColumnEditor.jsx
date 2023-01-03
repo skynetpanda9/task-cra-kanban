@@ -4,36 +4,14 @@ import React, { useRef, useEffect } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { ColumnEditorStyles } from "../styles";
 
-const ColumnEditor = ({
-  onEnter,
-  title,
-  onClickOutside,
-  handleChangeTitle,
-}) => {
-  function useOutsideAlerter(ref) {
-    useEffect(() => {
-      function handleClickOutside(event) {
-        if (ref.current && !ref.current.contains(event.target)) {
-          return;
-        }
-        onClickOutside();
-      }
-      document.addEventListener("mousedown", handleClickOutside, false);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside, false);
-      };
-    }, [ref]);
-  }
-
-  const wrapperRef = useRef();
-  useOutsideAlerter(wrapperRef);
-
+const ColumnEditor = ({ onEnter, title, handleChangeTitle }) => {
   return (
-    <div className='flex items-center' ref={wrapperRef}>
+    <div className='flex items-center'>
       <TextareaAutosize
         autoFocus
+        maxRows={3}
         className={ColumnEditorStyles.ceText}
-        placeholder='Enter column title...'
+        placeholder='Enter the title for column...'
         value={title}
         onChange={handleChangeTitle}
         onKeyDown={onEnter}

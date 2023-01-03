@@ -62,18 +62,19 @@ const TaskEditor = ({ text, onSave, onCancel, adding }) => {
   };
 
   return (
-    <div className={TaskEditorStyles.common}>
-      <div className={TaskEditorStyles.common}>
+    <div className={TaskEditorStyles.teMain}>
+      <div className={TaskEditorStyles.teBase}>
         <TextareaAutosize
           autoFocus
+          maxRows={2}
           className={TaskEditorStyles.textArea}
-          placeholder='Enter the text for this card...'
+          placeholder='Enter the task for this card...'
           value={mtext}
           onChange={handleChangeText}
           onKeyDown={onEnter}
         />
         {showError ? (
-          <p className='text-sm text-red-500 ml-2'>{error}</p>
+          <p className='text-sm text-red-500 mt-2'>{error}</p>
         ) : null}
       </div>
       <EditButtons

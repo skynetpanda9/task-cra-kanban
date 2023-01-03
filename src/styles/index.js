@@ -56,13 +56,14 @@ export const EditButtonsStyles = {
 
 export const ColumnEditorStyles = {
   ceText:
-    "rounded bg-gray-200 text-gray-900 dark:text-gray-200 dark:bg-gray-500 border-none resize-none outline-none text-base p-1 my-2 mr-0 ml-2 focus:shadow-md",
+    "rounded bg-gray-200 w-full text-gray-900 dark:text-gray-200 dark:bg-gray-500 border-none resize-none outline-none text-base p-2 m-2 focus:shadow-md",
   ceIcon:
     "cursor-pointer text-2xl rounded-md text-gray-900 hover:bg-gray-300 p-1 my-0.5 mx-1",
 };
+
 export const ColumnStyles = {
   Column:
-    "bg-gray-400 dark:bg-gray-800 flex-shrink-0 w-[272px] h-fit m-2 mr-0 rounded-md shadow-md text-gray-900 dark:text-gray-200",
+    "bg-gray-400 dark:bg-gray-800 flex-shrink-0 w-[260px] h-fit m-2 mr-0 rounded-md shadow-md text-gray-900 dark:text-gray-200",
   cAddCard:
     "cursor-pointer py-3 px-2 text-gray-200 rounded-md flex items-center",
   editList:
@@ -70,10 +71,12 @@ export const ColumnStyles = {
 };
 
 export const TaskEditorStyles = {
-  common: "min-h-[50px] py-2 w-full bg-gray-400 dark:bg-gray-800",
+  teMain: "min-h-[50px] py-2 bg-gray-400 dark:bg-gray-800",
+  teBase: "flex flex-col items-start m-2",
   textArea:
-    " ml-2 px-2 py-3 border-none rounded-md resize-none outline-none text-sm bg-gray-300 dark:bg-gray-500 text-gray-800 dark:text-gray-200",
+    "px-2 py-3 w-full border-none rounded-md resize-none outline-none text-sm bg-gray-300 dark:bg-gray-500 text-gray-800 dark:text-gray-200",
 };
+
 export const TaskStyles = {
   task: "relative flex flex-row items-center justify-between cursor-pointer backdrop-blur-sm bg-white/30 dark:bg-gray-500/20 m-2 p-3 bg-gray-300 dark:bg-gray-700 rounded-md shadow-md text-sm break-words min-h-[18px] hover:bg-gray-300 dark:hover:bg-gray-600",
   taskIcons: "absolute top-2 right-2 flex flex-row justify-end",
@@ -94,4 +97,12 @@ export const AssigneeModalStyles = {
   amIcon:
     "flex flex-row p-2 items-center w-full justify-between cursor-pointer rounded-md hover:bg-gray-400 dark:hover:bg-gray-800 hover:shadow-md",
   amBack: "fixed top-0 left-0 w-full h-full z-10 bg-black opacity-60",
+};
+
+export const HeaderStyles = {
+  hMain:
+    "flex z-50 flex-row items-center relative drop-shadow-md justify-between w-screen h-10 bg-gray-600 dark:bg-gray-800",
+  hRocket: "text-gray-100 ml-4 cursor-pointer",
+  hSub: "flex flex-row items-center justify-end",
+  switchLabel: "mr-4 text-gray-300 font-montserrat",
 };
