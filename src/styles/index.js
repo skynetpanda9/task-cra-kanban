@@ -35,7 +35,7 @@ export const NotFoundStyles = {
 export const MainLayoutStyles = {
   mlMain:
     "flex flex-col justify-center items-center w-[100vw] box-border my-auto",
-  mlProps: "flex flex-col w-[97vw] xl:w-full overflow-x-auto min-h-[90vh]",
+  mlProps: "flex flex-col w-[97vw] xl:w-full overflow-x-scroll min-h-[90vh]",
 };
 
 export const BoardStyles = {
@@ -48,8 +48,6 @@ export const BoardStyles = {
 export const EditButtonsStyles = {
   EditButtonGreen:
     "cursor-pointer w-fit ml-2 mr-1.5 mb-3 py-1 px-3 bg-gray-700 dark:bg-gray-900 rounded-md text-gray-100 font-normal outline-none hover:shadow-md hover:opacity-70",
-  EditButtonRed:
-    'cursor-pointer shadow-md w-fit ml-0 mr-1.5 mb-3 py-1.5 px-3 bg-["#EA2525"] rounded-md text-gray-100 font-bold outline-none hover:opacity-70',
   EditClose:
     "flex items-center text-xl opacity-50 hover:opacity-100 outline-none cursor-pointer mb-2",
 };
@@ -62,10 +60,11 @@ export const ColumnEditorStyles = {
 };
 
 export const ColumnStyles = {
-  Column:
-    "bg-gray-400 dark:bg-gray-800 flex-shrink-0 w-[260px] h-fit overflow-y-scroll scrollbar-hide min-h-[20vh] max-h-[90vh] m-2 rounded-md shadow-md text-gray-900 dark:text-gray-200",
-  editList:
-    "cursor-pointer w-[260px] p-3 text-gray-200 rounded-md bg-gray-500 dark:bg-gray-700 break-words z-10",
+  column:
+    "bg-gray-400 dark:bg-gray-800 flex-shrink-0 w-[260px] h-fit scrollbar-hide min-h-[90vh] flex flex-col item-center justify-center max-h-[90vh] m-2 rounded-md shadow-md text-gray-900 dark:text-gray-200",
+  cTitle:
+    "cursor-pointer w-[260px] p-3 text-gray-200 rounded-md bg-gray-500 dark:bg-gray-700 mb-auto break-words z-10",
+  cScrollable: "flex overflow-y-scroll flex-col h-[85vh]",
   cAddCard:
     "cursor-pointer py-3 px-2 text-gray-200 rounded-md flex items-center",
 };
