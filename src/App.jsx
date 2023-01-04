@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import "./App.css";
 import AllRoutes from "./Routes/Routes";
 
 function App() {

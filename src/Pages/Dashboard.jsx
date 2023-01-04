@@ -2,15 +2,16 @@
 import React from "react";
 import MainLayout from "../Layouts/MainLayout";
 import Header from "../components/Header";
-import KanbanStatic from "../components/KanbanStatic";
+import { DashStyle } from "../styles";
+import Board from "../components/Board";
 
 function Dashboard() {
   return (
     <div>
-      <div className='h-screen w-screen fixed flex flex-col items-center justify-start bg-gray-200 dark:bg-gray-900'>
+      <div className={DashStyle.DashMain}>
         <Header />
         <MainLayout>
-          <KanbanStatic />
+          <Board />
         </MainLayout>
       </div>
     </div>

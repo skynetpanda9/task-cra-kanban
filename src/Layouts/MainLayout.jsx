@@ -1,11 +1,10 @@
 import React from "react";
+import { MainLayoutStyles } from "../styles";
 
 const MainLayout = (props) => {
   return (
-    <div className='flex flex-col justify-center items-center w-[100vw] box-border my-auto'>
-      <div className='flex flex-col w-[97vw] xl:w-full overflow-x-auto min-h-[90vh]'>
-        {props.children}
-      </div>
+    <div className={MainLayoutStyles.mlMain}>
+      <div className={MainLayoutStyles.mlProps}>{props.children}</div>
     </div>
   );
 };
