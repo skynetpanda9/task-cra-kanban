@@ -78,7 +78,7 @@ const Board = ({ board }) => {
       <Droppable droppableId='board' direction='horizontal' type='COLUMN'>
         {(provided, snapshot) => (
           <div className={BoardStyles.board} ref={provided.innerRef}>
-            <div className='flex flex-row overflow-x-scroll' ref={ref}>
+            <div className={BoardStyles.bChild} ref={ref}>
               {board.lists.map((listId, index) => {
                 return <Column listId={listId} key={listId} index={index} />;
               })}

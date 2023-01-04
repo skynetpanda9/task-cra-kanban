@@ -8,7 +8,7 @@ import Task from "./Task";
 import TaskEditor from "./TaskEditor";
 import { ColumnStyles } from "../styles";
 import { connect } from "react-redux";
-import { AddIcon } from "../icons";
+import { AddIcon, StackIcon } from "../icons";
 
 const Column = ({ list, listId, index }) => {
   const dispatch = useDispatch();
@@ -49,6 +49,8 @@ const Column = ({ list, listId, index }) => {
     }, 50);
   }, [scrollDown]);
 
+  console.log(list.cards.length);
+
   return (
     <Draggable draggableId={list._id} index={index}>
       {(provided, snapshot) => (
@@ -58,7 +60,13 @@ const Column = ({ list, listId, index }) => {
           {...provided.dragHandleProps}
           className={ColumnStyles.column}
         >
-          <div className={ColumnStyles.cTitle}>{list.title}</div>
+          <div className={ColumnStyles.cTitle}>
+            {list.title}
+            <div className={ColumnStyles.cTitleChild}>
+              <StackIcon />
+              {list.cards.length}
+            </div>
+          </div>
           <Droppable droppableId={list._id}>
             {(provided, _snapshot) => (
               <>

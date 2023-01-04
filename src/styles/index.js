@@ -35,11 +35,13 @@ export const NotFoundStyles = {
 export const MainLayoutStyles = {
   mlMain:
     "flex flex-col justify-center items-center w-[100vw] box-border my-auto",
-  mlProps: "flex flex-col w-[97vw] xl:w-full overflow-x-scroll min-h-[90vh]",
+  mlProps:
+    "flex flex-col w-[97vw] xl:w-full scrollbar-hide overflow-x-scroll min-h-[90vh]",
 };
 
 export const BoardStyles = {
   board: "h-screen flex overflow-x-auto",
+  bChild: "flex flex-row overflow-x-scroll",
   addList: "w-[272px] m-2 flex-shrink-0",
   listButton:
     "bg-gray-600 dark:bg-gray-700 rounded-md cursor-pointer text-gray-300 flex w-[170px] items-center justify-between min-h-[32px] py-1 px-2 h-fit transition hover:bg-gray-800",
@@ -63,8 +65,9 @@ export const ColumnStyles = {
   column:
     "bg-gray-400 dark:bg-gray-800 flex-shrink-0 w-[260px] h-fit scrollbar-hide min-h-[90vh] flex flex-col item-center justify-center max-h-[90vh] m-2 rounded-md shadow-md text-gray-900 dark:text-gray-200",
   cTitle:
-    "cursor-pointer w-[260px] p-3 text-gray-200 rounded-md bg-gray-500 dark:bg-gray-700 mb-auto break-words z-10",
-  cScrollable: "flex overflow-y-scroll flex-col h-[85vh]",
+    "w-[260px] flex flex-row w-fit items-center justify-between p-3 text-gray-200 rounded-md bg-gray-500 dark:bg-gray-700 mb-auto break-words z-10",
+  cTitleChild: "flex flex-row items-center w-[16%] justify-between",
+  cScrollable: "flex overflow-y-scroll scrollbar-hide flex-col h-[85vh]",
   cAddCard:
     "cursor-pointer py-3 px-2 text-gray-200 rounded-md flex items-center",
 };
